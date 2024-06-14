@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 public class Personaje
 {
@@ -91,18 +93,120 @@ public class FabricaDePersonajes
     }
 }
 
+
+public class PersonajesJSON
+{
+    /* public void GuardarPersonajes(List<Personaje> personajes, string archivo)
+     {
+
+         string jsonString = System.Text.Json.JsonSerializer.Serialize(personajes);
+         File.WriteAllText(archivo, jsonString);
+
+     }*/
+
+    public void GuardarPersonajes(List<Personaje> personajes, string nombreArchivo)
+    {
+        string jsonString = System.Text.Json.JsonSerializer.Serialize(personajes);
+
+        using (var archivo = new FileStream(nombreArchivo, FileMode.Create))
+        {
+            using (var strWriter = new StreamWriter(archivo))
+            {
+                strWriter.WriteLine(jsonString);
+            }
+        }
+    }
+
+    public List<Personaje> LeerPersonajes(string archivo)
+    {
+        if (File.Exists(archivo))
+        {
+            string Json = File.ReadAllText(archivo);
+            return System.Text.Json.JsonSerializer.Deserialize<List<Personaje>>(Json);
+        }
+        else
+        {
+            Console.WriteLine("No se encontro el archivo");
+            return null;
+        }
+
+    }
+
+    public bool Existe(string archivo)
+    {
+        if (!File.Exists(archivo))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+}
+
+public class HistorialJson
+{
+    public void GuardarGanador(Personaje gana, string archivo)
+    {
+        if (!File.Exists(archivo))
+        {
+            File.Create(archivo);
+        }
+
+        string jsonString = JsonConvert.SerializeObject(gana);
+        File.WriteAllText(archivo, jsonString);
+    }
+
+
+    public List<Personaje> LeerGanador(string archivo)
+    {
+
+        string Json = File.ReadAllText(archivo);
+        return System.Text.Json.JsonSerializer.Deserialize<List<Personaje>>(Json);
+    }
+
+    public bool Existe(string archivo)
+    {
+        if (!File.Exists(archivo))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+}
+
 class Program
 {
     static void Main(string[] args)
     {
-        FabricaDePersonajes fabricaDePersonajes = new FabricaDePersonajes();
-        List<Personaje> personajes = new List<Personaje>();
+        var fabrica = new FabricaDePersonajes();
+        var pjJson = new PersonajesJSON();
+        var historial = new HistorialJson();
+        var archivoPersonajes = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\archivo.txt";
+        var archivoHistorial = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\historial.txt";
 
-        for (int i = 0; i < 10; i++)
+        var personajes = new List<Personaje>();
+
+        if (pjJson.Existe(archivoPersonajes))
         {
-            personajes.Add(fabricaDePersonajes.CrearPersonajesAleatorios());
+            personajes = pjJson.LeerPersonajes(archivoPersonajes);
+        }
+        else
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                personajes.Add(fabrica.CrearPersonajesAleatorios());
+            }
+            pjJson.GuardarPersonajes(personajes, archivoPersonajes);
+            
         }
 
-        fabricaDePersonajes.MostrarPersonaje(personajes);
+        personajes = pjJson.LeerPersonajes(archivoPersonajes);
+        fabrica.MostrarPersonaje(personajes);
     }
 }
