@@ -12,7 +12,7 @@ public class Personaje
     private string apodo;
     private DateTime fechaNacimiento;
     private int edad;
-    private int velocidad, destreza, fuerza, nivel, armadura, salud;
+    private int velocidad, destreza, fuerza, nivel, armadura, salud, id;
 
     public string Tipo { get => tipo; set => tipo = value; }
     public string Name { get => name; set => name = value; }
@@ -25,8 +25,9 @@ public class Personaje
     public int Nivel { get => nivel; set => nivel = value; }
     public int Armadura { get => armadura; set => armadura = value; }
     public int Salud { get => salud; set => salud = value; }
-}
+    public int Id { get => id; set => id = value; }
 
+}
 enum NombrePersonajes
 {
     LiuKang,
@@ -56,6 +57,7 @@ public class FabricaDePersonajes
 {
     public Personaje CrearPersonajesAleatorios()
     {
+
         Random random = new Random();
         var personaje = new Personaje();
 
@@ -75,8 +77,10 @@ public class FabricaDePersonajes
 
     public void MostrarPersonaje(List<Personaje> personajes)
     {
+        int i = 1;
         foreach (var datosPJ in personajes)
         {
+            Console.WriteLine("ID: " + i++);
             Console.WriteLine("Nombre: " + datosPJ.Name);
             Console.WriteLine("Tipo: " + datosPJ.Tipo);
             Console.WriteLine("Apodo: " + datosPJ.Apodo);
@@ -180,6 +184,80 @@ public class HistorialJson
     }
 }
 
+public class Combate
+{
+
+    public void realizarCombate(Personaje atacante, Personaje defensor)
+    {
+        var random = new Random();
+        int ataque = atacante.Destreza * atacante.Fuerza * atacante.Nivel;
+        int efectividad = random.Next(1, 101);
+        int defensa = defensor.Armadura * defensor.Velocidad;
+        const int Ajuste = 500;
+
+        int danioProvocado = ((ataque * efectividad) - defensa) / Ajuste;
+
+        defensor.Salud = defensor.Salud - danioProvocado;
+    }
+
+    public void turno(Personaje p1,Personaje p2)
+    {
+        while (p1.Salud > 0 || p2.Salud > 0)
+        {
+            realizarCombate(p1,p2);
+
+            if (p2.Salud <= 0){
+                Console.WriteLine("El ganador fue" + p1.Name);
+                break;
+            }
+
+            realizarCombate(p2,p1);
+        }
+
+        if (p1.Salud <= 0){
+            Console.WriteLine("El ganador fue" + p2.Name);
+        }
+
+    }
+
+}
+
+public class seleccion
+{
+    public Personaje seleccionarPersonaje(List<Personaje> personaje, int id)
+    {
+        foreach (var item in personaje)
+        {
+            if (item.Id == id)
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    public void personajeSeleccionado(Personaje pj)
+    {
+            Console.WriteLine("El personaje seleccionado es: \n");
+            Console.WriteLine("Nombre: " + pj.Name);
+            Console.WriteLine("Tipo: " + pj.Tipo);
+            Console.WriteLine("Apodo: " + pj.Apodo);
+            Console.WriteLine("Fecha de Nacimiento: " + pj.FechaNacimiento.ToString("dd/MM/yyyy"));
+            Console.WriteLine("Edad: " + pj.Edad);
+            Console.WriteLine("Velocidad: " + pj.Velocidad);
+            Console.WriteLine("Destreza: " + pj.Destreza);
+            Console.WriteLine("Fuerza: " + pj.Fuerza);
+            Console.WriteLine("Nivel: " + pj.Nivel);
+            Console.WriteLine("Armadura: " + pj.Armadura);
+            Console.WriteLine("Salud: " + pj.Salud);
+            Console.WriteLine();
+    }
+}
+
+
+
+
 class Program
 {
     static void Main(string[] args)
@@ -187,6 +265,8 @@ class Program
         var fabrica = new FabricaDePersonajes();
         var pjJson = new PersonajesJSON();
         var historial = new HistorialJson();
+        var combate = new Combate();
+        var seleccion = new seleccion();
         var archivoPersonajes = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\archivo.txt";
         var archivoHistorial = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\historial.txt";
 
@@ -203,10 +283,16 @@ class Program
                 personajes.Add(fabrica.CrearPersonajesAleatorios());
             }
             pjJson.GuardarPersonajes(personajes, archivoPersonajes);
-            
+
         }
 
         personajes = pjJson.LeerPersonajes(archivoPersonajes);
         fabrica.MostrarPersonaje(personajes);
+
+        var personajeSeleccionado = seleccion.seleccionarPersonaje(personajes,1);
+
+        seleccion.personajeSeleccionado(personajeSeleccionado);
+
+
     }
 }
