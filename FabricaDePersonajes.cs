@@ -26,10 +26,10 @@ namespace fabrica
 
         public void MostrarPersonaje(List<Personaje> personajes)
         {
-            int i = 1;
+
             foreach (var datosPJ in personajes)
             {
-                Console.WriteLine("ID: " + i++);
+                Console.WriteLine("ID: " + datosPJ.Id);
                 Console.WriteLine("Nombre: " + datosPJ.Name);
                 Console.WriteLine("Tipo: " + datosPJ.Tipo);
                 Console.WriteLine("Apodo: " + datosPJ.Apodo);

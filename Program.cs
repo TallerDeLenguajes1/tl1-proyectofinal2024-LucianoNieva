@@ -32,20 +32,40 @@ class Program
             for (int i = 0; i < 10; i++)
             {
                 var nuevoPJ = fabrica.CrearPersonajesAleatorios();
-                nuevoPJ.Id = i+1;
-                personajes.Add(fabrica.CrearPersonajesAleatorios());
+                nuevoPJ.Id = i + 1;
+                personajes.Add(nuevoPJ);
             }
             pjJson.GuardarPersonajes(personajes, archivoPersonajes);
 
         }
 
         personajes = pjJson.LeerPersonajes(archivoPersonajes);
+
+
         fabrica.MostrarPersonaje(personajes);
 
-        var personajeSeleccionado = seleccion.seleccionarPersonaje(personajes,1);
+        Console.WriteLine("Seleccione el id del personaje que desea usar");
+        string selec = Console.ReadLine();
+        int.TryParse(selec, out int op);
+        var personajeSeleccionado = seleccion.seleccionarPersonaje(personajes,op);
+        var personajeSeleccionado2 = seleccion.seleccionarPersonaje(personajes, 2);
+
+        var pjGanador = combate.turno(personajeSeleccionado,personajeSeleccionado2);
+        historial.GuardarGanador(pjGanador,archivoHistorial);
+        var leerPJ = historial.LeerGanador(archivoHistorial);
+        fabrica.MostrarPersonaje(new List<Personaje> { leerPJ });
+        
+
 
         seleccion.personajeSeleccionado(personajeSeleccionado);
         personajes.Remove(personajeSeleccionado);
+
+
+        Console.WriteLine("Estos son los personajes restantes");
+        fabrica.MostrarPersonaje(personajes);
+
+
+        
 
 
     }
