@@ -1,4 +1,5 @@
 using personaje;
+using seleccionPersonaje;
 
 
 namespace combates
@@ -30,7 +31,36 @@ namespace combates
                 if (p2.Salud <= 0)
                 {
                     Console.WriteLine("El ganador fue " + p1.Name);
-                    Console.WriteLine("---------COMBATE FINALIZADO--------");
+                    
+                    Console.WriteLine("\nDesea realizar una fatality?");
+                    Console.WriteLine("1) Si");
+                    Console.WriteLine("0) No");
+                    int.TryParse(Console.ReadLine(), out int fatality);
+                    if (fatality == 0)
+                    {
+                        Console.WriteLine("---------COMBATE FINALIZADO--------");
+                        return p1;
+                    }else
+                    {
+                        if (fatality == 1)
+                        {
+                            var random2 = new Random();
+                            int i = random2.Next(0, 1);
+
+                            if (i == 0)
+                            {
+                                Console.WriteLine("Fallo la combinacion. no se realizo la fatality");
+                                Console.WriteLine("---------COMBATE FINALIZADO--------");
+                            }else
+                            {
+                                if (i == 1)
+                                {
+                                    Console.WriteLine("La fatality se realizo con exito");
+                                    Console.WriteLine("---------COMBATE FINALIZADO--------");
+                                }
+                            }
+                        }
+                    }
                     return p1;
                 }
 
@@ -39,11 +69,67 @@ namespace combates
                 if (p1.Salud <= 0)
                 {
                     Console.WriteLine("El ganador fue " + p2.Name);
-                    Console.WriteLine("---------COMBATE FINALIZADO--------");
+                    Console.WriteLine("\nDesea realizar una fatality?");
+                    Console.WriteLine("1) Si");
+                    Console.WriteLine("0) No");
+                    int.TryParse(Console.ReadLine(), out int fatality);
+                    if (fatality == 0)
+                    {
+                        Console.WriteLine("---------COMBATE FINALIZADO--------");
+                        return p2;
+                    }else
+                    {
+                        if (fatality == 1)
+                        {
+                            var random2 = new Random();
+                            int i = random2.Next(0,1);
+
+                            if (i == 0)
+                            {
+                                
+                                Console.WriteLine("Fallo la combinacion. no se realizo la fatality");
+                                Console.WriteLine("---------COMBATE FINALIZADO--------");
+                            }else
+                            {
+                                if (i == 1)
+                                {
+                                    Console.WriteLine("La fatality se realizo con exito");
+                                    Console.WriteLine("---------COMBATE FINALIZADO--------");
+                                }
+                            }
+                        }
+                    }
                     return p2;
                 }
             }
             return null;
+        }
+
+        public void combateTorre(Personaje pjPrincipal ,int nivel){
+
+            var random = new Random();
+            var seleccion = new Seleccion();
+
+            switch (nivel)
+            {
+                case 3:
+                    nivel = 3;
+                    break;
+
+                case 5:
+                    nivel = 5;
+                    break;
+
+                case 7:
+                    nivel = 7;
+                    break;
+            }
+
+            for (int i = 0; i < nivel; i++)
+            {
+                var pj2 = seleccion.seleccionarPersonaje(personajes, i);
+            }
+
         }
 
     }

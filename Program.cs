@@ -9,6 +9,8 @@ using JSON;
 using combates;
 using seleccionPersonaje;
 using barra;
+
+
 class Program
 {
     static void Main(string[] args)
@@ -99,8 +101,7 @@ class Program
 
                 case 2:
                     Console.WriteLine("\nSeleccione el id del personaje que desea usar:");
-                    string selec = Console.ReadLine();
-                    int.TryParse(selec, out int op);
+                    int.TryParse(Console.ReadLine(), out int op);
 
                     if (op >= 1 && op <= 10)
                     {
