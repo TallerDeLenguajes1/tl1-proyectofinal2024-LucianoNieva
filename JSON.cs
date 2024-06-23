@@ -61,7 +61,7 @@ namespace JSON
 
     public class HistorialJson
     {
-        public void GuardarGanador(Personaje gana, string nombreArch)
+        public void GuardarGanador(List<Personaje> gana, string nombreArch)
         {
             string jsonString = System.Text.Json.JsonSerializer.Serialize(gana);
 
@@ -75,13 +75,13 @@ namespace JSON
         }
 
 
-        public Personaje LeerGanador(string archivo)
+        public List<Personaje> LeerGanador(string archivo)
         {
 
             if (File.Exists(archivo))
             {
                 string Json = File.ReadAllText(archivo);
-                return System.Text.Json.JsonSerializer.Deserialize<Personaje>(Json);
+                return System.Text.Json.JsonSerializer.Deserialize<List<Personaje>>(Json);
             }
             else
             {
