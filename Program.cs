@@ -20,8 +20,8 @@ class Program
         var historial = new HistorialJson();
         var combate = new Combate();
         var seleccion = new Seleccion();
-        var archivoPersonajes = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\texto.json";
-        var archivoHistorial = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\historial.json";
+        var archivoPersonajes = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\texto.json";
+        var archivoHistorial = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\historial.json";
         var personajes = new List<Personaje>();
         var listGanadores = new List<Personaje>();
 
@@ -41,6 +41,9 @@ class Program
 
         }
         personajes = pjJson.LeerPersonajes(archivoPersonajes);
+
+        Console.WriteLine("\nCargando el juego...\n");
+        LoadingBar.Show();
 
         Console.WriteLine("\nBienvenido a Mortal Kombat\n");
         Console.WriteLine("                     _..gggggppppp.._                       \n" +
@@ -79,14 +82,13 @@ class Program
                          "               \"^T$$$$$$$$$$$$$$$$$$$$$$$$$$P^\"               \n" +
                          "                   \"\"\"^^^T$$$$$$$$$$P^^^\"\"\"");
 
-        Console.WriteLine("\nCargando el juego...\n");
-        LoadingBar.Show();
 
 
-        Console.WriteLine("\nSeleccione una opcion: ");
-        Console.WriteLine("\n1) Mostrar personajes: ");
-        Console.WriteLine("\n2) Realizar combate 1v1: ");
-        Console.WriteLine("\n3) Realizar torneo: ");
+
+        Console.WriteLine("\nSeleccione una opcion ");
+        Console.WriteLine("\n1) Mostrar personajes ");
+        Console.WriteLine("\n2) Realizar combate 1v1 ");
+        Console.WriteLine("\n3) Realizar torneo ");
         Console.WriteLine("\n4) Leer historial de ganadores");
 
         int.TryParse(Console.ReadLine(), out int selecMenu);
@@ -123,7 +125,21 @@ class Program
                     }
                     break;
                 case 3:
-                    Console.WriteLine("\nEn mantenimiento");
+                    Console.WriteLine("\nSeleccione el id del personaje que desea usar:");
+                    int.TryParse(Console.ReadLine(), out int op2);
+
+                    if (op2 >= 1 && op2 <= 10)
+                    {
+                        var PjSeleccionado = seleccion.seleccionarPersonaje(personajes, op2);
+                        seleccion.personajeSeleccionado(PjSeleccionado);
+                        personajes.Remove(PjSeleccionado);
+                        combate.combateTorre(PjSeleccionado,personajes,combate,historial,archivoHistorial);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nNo selecciono un ID correcto.");
+                    }
+                    
                     break;
 
                 case 4:
@@ -134,10 +150,10 @@ class Program
 
             }
 
-            Console.WriteLine("\nSeleccione otra opcion: ");
-            Console.WriteLine("\n1) Mostrar personajes: ");
-            Console.WriteLine("\n2) Realizar combate 1v1: ");
-            Console.WriteLine("\n3) Realizar torneo: ");
+            Console.WriteLine("\nSeleccione otra opcion ");
+            Console.WriteLine("\n1) Mostrar personajes ");
+            Console.WriteLine("\n2) Realizar combate 1v1 ");
+            Console.WriteLine("\n3) Realizar torneo ");
             Console.WriteLine("\n4) Leer historial de ganadores");
             Console.WriteLine("\n0) Salir del juego");
 
@@ -147,5 +163,5 @@ class Program
 
     }
 
-   
+
 }

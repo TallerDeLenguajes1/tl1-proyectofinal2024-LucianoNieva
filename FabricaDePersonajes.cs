@@ -4,13 +4,22 @@ namespace fabrica
 {
     public class FabricaDePersonajes
     {
+        private List<string> nombresUsados = new List<string>();
         public Personaje CrearPersonajesAleatorios()
         {
 
             Random random = new Random();
             var personaje = new Personaje();
 
-            personaje.Name = Enum.GetName(typeof(NombrePersonajes), random.Next(1, Enum.GetNames(typeof(NombrePersonajes)).Length));
+
+            string nombre;
+            do
+            {
+                nombre = Enum.GetName(typeof(NombrePersonajes), random.Next(Enum.GetNames(typeof(NombrePersonajes)).Length));
+            } while (nombresUsados.Contains(nombre));
+
+            nombresUsados.Add(nombre);
+            personaje.Name = nombre;
             personaje.Tipo = Enum.GetName(typeof(Tipo), random.Next(1, Enum.GetNames(typeof(Tipo)).Length));
             personaje.Edad = random.Next(0, 300);
             personaje.FechaNacimiento = DateTime.Now.AddYears(-personaje.Edad);
