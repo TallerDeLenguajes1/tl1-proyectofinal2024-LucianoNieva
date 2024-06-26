@@ -16,6 +16,7 @@ namespace fabrica
             do
             {
                 nombre = Enum.GetName(typeof(NombrePersonajes), random.Next(Enum.GetNames(typeof(NombrePersonajes)).Length));
+                
             } while (nombresUsados.Contains(nombre));
 
             nombresUsados.Add(nombre);

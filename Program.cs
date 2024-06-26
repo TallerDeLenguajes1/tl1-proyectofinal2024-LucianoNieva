@@ -102,46 +102,15 @@ class Program
                     break;
 
                 case 2:
-                    Console.WriteLine("\nSeleccione el id del personaje que desea usar:");
-                    int.TryParse(Console.ReadLine(), out int op);
-
-                    if (op >= 1 && op <= 10)
-                    {
-                        var personajeSeleccionado = seleccion.seleccionarPersonaje(personajes, op);
-                        seleccion.personajeSeleccionado(personajeSeleccionado);
-                        personajes.Remove(personajeSeleccionado);
-
-                        Console.WriteLine("\nSeleccione el id del personaje que sera su oponente:");
-                        int.TryParse(Console.ReadLine(), out int selec2);
-
-                        var personajeSeleccionado2 = seleccion.seleccionarPersonaje(personajes, selec2);
-                        var pjGanador = combate.turno(personajeSeleccionado, personajeSeleccionado2);
-                        listGanadores.Add(pjGanador);
-                        historial.GuardarGanador(listGanadores, archivoHistorial);
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nNo selecciono un ID correcto.");
-                    }
+                    var pjGanador = combate.turno(personajes, personajes);
+                    listGanadores.Add(pjGanador);
+                    historial.GuardarGanador(listGanadores, archivoHistorial);
                     break;
                 case 3:
-                    Console.WriteLine("\nSeleccione el id del personaje que desea usar:");
-                    int.TryParse(Console.ReadLine(), out int op2);
-
-                    if (op2 >= 1 && op2 <= 10)
-                    {
-                        var PjSeleccionado = seleccion.seleccionarPersonaje(personajes, op2);
-                        seleccion.personajeSeleccionado(PjSeleccionado);
-                        personajes.Remove(PjSeleccionado);
-                        combate.combateTorre(PjSeleccionado,personajes,combate,historial,archivoHistorial);
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nNo selecciono un ID correcto.");
-                    }
-                    
+                    var pjGanador2 = combate.combateTorre(personajes,personajes,combate);
+                    listGanadores.Add(pjGanador2);
+                    historial.GuardarGanador(listGanadores, archivoHistorial);
                     break;
-
                 case 4:
                     var leerPJ = historial.LeerGanador(archivoHistorial);
                     Console.WriteLine("\n--Historial ganadores--\n");

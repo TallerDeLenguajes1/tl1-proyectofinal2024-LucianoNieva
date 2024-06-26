@@ -32,7 +32,7 @@ namespace JSON
 
         public List<Personaje> LeerPersonajes(string archivo)
         {
-            if (File.Exists(archivo))
+            if (Existe(archivo))
             {
                 string Json = File.ReadAllText(archivo);
                 return System.Text.Json.JsonSerializer.Deserialize<List<Personaje>>(Json);
@@ -77,8 +77,7 @@ namespace JSON
 
         public List<Personaje> LeerGanador(string archivo)
         {
-
-            if (File.Exists(archivo))
+            if (Existe(archivo))
             {
                 string Json = File.ReadAllText(archivo);
                 return System.Text.Json.JsonSerializer.Deserialize<List<Personaje>>(Json);
@@ -86,7 +85,7 @@ namespace JSON
             else
             {
                 Console.WriteLine("No se encontro el archivo");
-                return null;
+                return new List<Personaje>();
             }
         }
 
