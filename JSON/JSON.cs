@@ -101,4 +101,23 @@ namespace JSON
             }
         }
     }
+
+    public class ArchivoPersonajes
+    {
+        private PersonajesJSON personajesJSON = new PersonajesJSON();
+
+        public List<Personaje> GuardarYLeer(List<Personaje> listaPjs, string archivo)
+        {
+            if (personajesJSON.Existe(archivo))
+            {
+                return personajesJSON.LeerPersonajes(archivo);
+            }
+            else
+            {
+                personajesJSON.GuardarPersonajes(listaPjs, archivo);
+            }
+
+            return personajesJSON.LeerPersonajes(archivo);
+        }
+    }
 }
