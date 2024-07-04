@@ -70,35 +70,7 @@ namespace combates
                     Console.WriteLine("El ganador fue " + pjSeleccionado.Datos.Name);
                     pjSeleccionado.Caracteristicas.Salud = 100;
                     pjSeleccionado2.Caracteristicas.Salud = 100;
-                    Console.WriteLine("\nDesea realizar una fatality?");
-                    Console.WriteLine("1) Sí");
-                    Console.WriteLine("0) No");
-                    int.TryParse(Console.ReadLine(), out int fatality);
-                    if (fatality == 0)
-                    {
-                        Console.WriteLine("---------COMBATE FINALIZADO--------");
-                        return pjSeleccionado;
-                    }
-                    else if (fatality == 1)
-                    {
-                        var random2 = new Random();
-                        int i = random2.Next(0, 2);
-
-                        if (i == 0)
-                        {
-                            Console.WriteLine("Falló la combinación. No se realizó la fatality.");
-                            Console.WriteLine("No recibiste una bonificación.");
-                            Console.WriteLine("---------COMBATE FINALIZADO--------");
-                        }
-                        else
-                        {
-                            Console.WriteLine("La fatality se realizó con éxito.");
-                            Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
-                            pjSeleccionado.Caracteristicas.Fuerza += 5;
-                            pjSeleccionado.Caracteristicas.Armadura += 5;
-                            Console.WriteLine("---------COMBATE FINALIZADO--------");
-                        }
-                    }
+                    ManejarFatality(pjSeleccionado);
                     return pjSeleccionado;
                 }
 
@@ -117,7 +89,7 @@ namespace combates
             return null;
         }
 
-        public async Task<Personaje> turnoTorneo(Personaje p1, Personaje p2)
+        public Personaje turnoTorneo(Personaje p1, Personaje p2)
         {
             while (p1.Caracteristicas.Salud > 0 && p2.Caracteristicas.Salud > 0)
             {
@@ -128,35 +100,7 @@ namespace combates
                     Console.WriteLine("El ganador fue " + p1.Datos.Name);
                     p1.Caracteristicas.Salud = 100;
                     p2.Caracteristicas.Salud = 100;
-                    Console.WriteLine("\nDesea realizar una fatality?");
-                    Console.WriteLine("1) Sí");
-                    Console.WriteLine("0) No");
-                    int.TryParse(Console.ReadLine(), out int fatality);
-                    if (fatality == 0)
-                    {
-                        Console.WriteLine("---------COMBATE FINALIZADO--------");
-                        return p1;
-                    }
-                    else if (fatality == 1)
-                    {
-                        var random2 = new Random();
-                        int i = random2.Next(0, 2);
-
-                        if (i == 0)
-                        {
-                            Console.WriteLine("Falló la combinación. No se realizó la fatality.");
-                            Console.WriteLine("No recibiste una bonificación.");
-                            Console.WriteLine("---------COMBATE FINALIZADO--------");
-                        }
-                        else
-                        {
-                            Console.WriteLine("La fatality se realizó con éxito.");
-                            Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
-                            p1.Caracteristicas.Fuerza += 5;
-                            p1.Caracteristicas.Armadura += 5;
-                            Console.WriteLine("---------COMBATE FINALIZADO--------");
-                        }
-                    }
+                    ManejarFatality(p1);
                     return p1;
                 }
 
@@ -237,7 +181,7 @@ namespace combates
                 WeatherApi.AdjustCharacterStats(pjSeleccionado, weather);
                 WeatherApi.AdjustCharacterStats(pjSeleccionado2, weather);
 
-                var pjGanador = await combate.turnoTorneo(pjSeleccionado, pjSeleccionado2); // Agregado await
+                var pjGanador = combate.turnoTorneo(pjSeleccionado, pjSeleccionado2); // Agregado await
 
                 if (pjGanador == pjSeleccionado)
                 {
@@ -260,5 +204,38 @@ namespace combates
 
             return null;
         }
+
+        private static void ManejarFatality(Personaje pjSeleccionado)
+        {
+            Console.WriteLine("\nDesea realizar una fatality?");
+            Console.WriteLine("1) Sí");
+            Console.WriteLine("0) No");
+            int.TryParse(Console.ReadLine(), out int fatality);
+            if (fatality == 0)
+            {
+                Console.WriteLine("---------COMBATE FINALIZADO--------");
+            }
+            else if (fatality == 1)
+            {
+                var random2 = new Random();
+                int i = random2.Next(0, 2);
+
+                if (i == 0)
+                {
+                    Console.WriteLine("Falló la combinación. No se realizó la fatality.");
+                    Console.WriteLine("No recibiste una bonificación.");
+                    Console.WriteLine("---------COMBATE FINALIZADO--------");
+                }
+                else
+                {
+                    Console.WriteLine("La fatality se realizó con éxito.");
+                    Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
+                    pjSeleccionado.Caracteristicas.Fuerza += 5;
+                    pjSeleccionado.Caracteristicas.Armadura += 5;
+                    Console.WriteLine("---------COMBATE FINALIZADO--------");
+                }
+            }
+        }
+
     }
 }
