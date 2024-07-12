@@ -13,8 +13,8 @@ class Program
         var GuardarYLeer = new ArchivoPersonajes();
         var historial = new HistorialJson();
         var combate = new Combate();
-        var archivoPersonajes = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\JSON\personajes.json";
-        var archivoHistorial = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\JSON\historial.json";
+        var archivoPersonajes = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\personajes.json";
+        var archivoHistorial = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\historial.json";
         var pjFabricados = fabrica.crearPersonajes(10);
         var listGanadores = new List<Personaje>();
         var mostrarAscii = new Ascii();

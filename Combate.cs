@@ -35,9 +35,24 @@ namespace combates
             pjSeleccionado = SeleccionarPJ(p1, seleccion, pjSeleccionado);
             Personaje pjSeleccionado2 = SeleccionarPJ(p1, seleccion, pjSeleccionado);
 
-            await verificarBonificacionClima(pjSeleccionado,pjSeleccionado2);
+            await verificarBonificacionClima(pjSeleccionado, pjSeleccionado2);
+            return seleccionarModoCombate(pjSeleccionado, pjSeleccionado2);
 
-            return realizarCombate(pjSeleccionado, pjSeleccionado2);
+        }
+
+        private Personaje seleccionarModoCombate(Personaje pjSeleccionado, Personaje pjSeleccionado2)
+        {
+            Console.WriteLine("\nDesea realizar combate contra otro jugador o contra bot 1 bot 2 amigo:");
+            int.TryParse(Console.ReadLine(), out int n);
+
+            if (n == 1)
+            {
+                return realizarCombate(pjSeleccionado, pjSeleccionado2);
+            }
+            else
+            {
+                return realizarCombate2v2(pjSeleccionado, pjSeleccionado2);
+            }
         }
 
         private static Personaje SeleccionarPJ(List<Personaje> p1, Seleccion seleccion, Personaje pjSeleccionado)
@@ -107,7 +122,82 @@ namespace combates
             }
             return null;
         }
+        public Personaje realizarCombate2v2(Personaje p1, Personaje p2)
+        {
+            while (p1.Caracteristicas.Salud > 0 && p2.Caracteristicas.Salud > 0)
+            {
+                Console.WriteLine("\n Personaje 1 desea atacar(1) o defender (2):");
+                int.TryParse(Console.ReadLine(), out int op);
 
+                if (op == 1)
+                {
+                    realizarAtaqueYDefensa(p1, p2);
+
+                    if (p2.Caracteristicas.Salud <= 0)
+                    {
+                        Console.WriteLine("El ganador fue " + p1.Datos.Name);
+                        p1.Caracteristicas.Salud = 100;
+                        p2.Caracteristicas.Salud = 100;
+                        ManejarFatality(p1);
+                        return p1;
+                    }
+                }
+                else
+                {
+                    if (op == 2)
+                    {
+                        realizarAtaqueYDefensa(p2, p1);
+
+                        if (p1.Caracteristicas.Salud <= 0)
+                        {
+                            Console.WriteLine("\nPerdiste la batalla.");
+                            Console.WriteLine("El ganador fue " + p2.Datos.Name);
+                            Console.WriteLine("---------COMBATE FINALIZADO--------");
+                            p1.Caracteristicas.Salud = 100;
+                            p2.Caracteristicas.Salud = 100;
+                            return p2;
+                        }
+                    }
+                }
+
+                Console.WriteLine("\n Personaje 2 desea atacar(1) o defender (2):");
+                int.TryParse(Console.ReadLine(), out int op2);
+
+                if (op2 == 1)
+                {
+                    realizarAtaqueYDefensa(p2, p1);
+
+                    if (p1.Caracteristicas.Salud <= 0)
+                    {
+                        Console.WriteLine("El ganador fue " + p2.Datos.Name);
+                        p1.Caracteristicas.Salud = 100;
+                        p2.Caracteristicas.Salud = 100;
+                        ManejarFatality(p2);
+                        return p2;
+                    }
+                }
+                else
+                {
+                    if (op2 == 2)
+                    {
+                        realizarAtaqueYDefensa(p1, p2);
+
+                        if (p2.Caracteristicas.Salud <= 0)
+                        {
+                            Console.WriteLine("\nPerdiste la batalla.");
+                            Console.WriteLine("El ganador fue " + p1.Datos.Name);
+                            Console.WriteLine("---------COMBATE FINALIZADO--------");
+                            p1.Caracteristicas.Salud = 100;
+                            p2.Caracteristicas.Salud = 100;
+                            ManejarFatality(p1);
+                            return p1;
+                        }
+                    }
+                }
+            }
+            return null;
+
+        }
 
         public async Task<Personaje> combateTorre(List<Personaje> pjPrincipal, List<Personaje> PjSecundario, Combate combate)
         {
@@ -143,15 +233,10 @@ namespace combates
                 }
             }
 
-            if (pjSeleccionado.Caracteristicas.Salud > 0)
-            {
-                Console.WriteLine("\n¡Felicidades, ganaste el torneo!");
-                Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} ganó todos los niveles");
-                Console.WriteLine("-------------------------------------------------------------");
-                return pjSeleccionado;
-            }
-
-            return null;
+            Console.WriteLine("\n¡Felicidades, ganaste el torneo!");
+            Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} ganó todos los niveles");
+            Console.WriteLine("-------------------------------------------------------------");
+            return pjSeleccionado;
         }
 
         private static async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)

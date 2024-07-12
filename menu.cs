@@ -5,10 +5,10 @@ using combates;
 
 namespace MenuIteractivo
 {
-    
+
     public static class Menu
     {
-        
+
         public static async Task NewMethod(FabricaDePersonajes fabrica, HistorialJson historial, Combate combate, string archivoHistorial, List<Personaje> pjFabricados, List<Personaje> listGanadores)
         {
             Console.WriteLine("\nSeleccione una opcion ");
