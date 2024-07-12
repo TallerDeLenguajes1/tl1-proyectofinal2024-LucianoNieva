@@ -69,18 +69,18 @@ namespace CrearApi
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
+                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima lluvioso.");
                 }else
                 {
                     Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
                 }
                 break;
             case "Fujin":
-                if (weather.Contains("Wind"))
+                if (weather.Contains("Wind") || weather.Contains("Windy"))
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
+                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima ventoso.");
                 }else
                 {
                     Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
@@ -91,7 +91,7 @@ namespace CrearApi
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
+                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima de la tormenta.");
                 }else
                 {
                     Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
@@ -103,7 +103,7 @@ namespace CrearApi
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
+                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima caluroso.");
                 }else
                 {
                     Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
@@ -114,7 +114,7 @@ namespace CrearApi
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
+                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido a un terremoto.");
                 }else
                 {
                     Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
@@ -132,7 +132,7 @@ namespace CrearApi
                 }
                 break;
             case "Kabal":
-                if (weather.Contains("Windy"))
+                if (weather.Contains("Windy") || weather.Contains("Wind"))
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;

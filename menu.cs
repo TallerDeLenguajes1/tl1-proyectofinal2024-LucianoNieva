@@ -30,7 +30,7 @@ namespace MenuIteractivo
                             break;
 
                         case 2:
-                            var pjGanador = await combate.turno(pjFabricados, pjFabricados); // Agregado await
+                            var pjGanador = await combate.pelea1v1(pjFabricados, pjFabricados); // Agregado await
                             listGanadores.Add(pjGanador);
                             historial.GuardarGanador(listGanadores, archivoHistorial);
                             break;

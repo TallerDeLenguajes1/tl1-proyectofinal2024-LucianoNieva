@@ -1,5 +1,4 @@
-﻿
-using personaje;
+﻿using personaje;
 using fabrica;
 using JSON;
 using combates;
@@ -14,8 +13,8 @@ class Program
         var GuardarYLeer = new ArchivoPersonajes();
         var historial = new HistorialJson();
         var combate = new Combate();
-        var archivoPersonajes = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\JSON\personajes.json";
-        var archivoHistorial = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\JSON\historial.json";
+        var archivoPersonajes = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\JSON\personajes.json";
+        var archivoHistorial = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\JSON\historial.json";
         var pjFabricados = fabrica.crearPersonajes(10);
         var listGanadores = new List<Personaje>();
         var mostrarAscii = new Ascii();
@@ -24,7 +23,6 @@ class Program
 
         Console.WriteLine("\nCargando el juego...\n");
         LoadingBar.Show();
-
         Console.WriteLine("\nBienvenido a Mortal Kombat\n");
         mostrarAscii.MostrarLogo();
         Console.WriteLine("\nPresione una tecla para empezar..");
