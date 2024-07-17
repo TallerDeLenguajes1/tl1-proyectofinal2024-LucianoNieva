@@ -2,6 +2,7 @@ using JSON;
 using personaje;
 using seleccionPersonaje;
 using CrearApi;
+using ascii;
 
 namespace combates
 {
@@ -95,6 +96,7 @@ namespace combates
 
         public Personaje realizarCombate(Personaje p1, Personaje p2)
         {
+            var asci = new Ascii();
             while (p1.Caracteristicas.Salud > 0 && p2.Caracteristicas.Salud > 0)
             {
                 realizarAtaqueYDefensa(p1, p2);
@@ -114,6 +116,7 @@ namespace combates
                 {
                     Console.WriteLine("\nPerdiste la batalla.");
                     Console.WriteLine("El ganador fue " + p2.Datos.Name);
+                    asci.mostrarPJ(p2);
                     Console.WriteLine("---------COMBATE FINALIZADO--------");
                     p1.Caracteristicas.Salud = 100;
                     p2.Caracteristicas.Salud = 100;
@@ -280,12 +283,14 @@ namespace combates
 
         private static void ManejarFatality(Personaje pjSeleccionado)
         {
+            var asci = new Ascii();
             Console.WriteLine("\nDesea realizar una fatality?");
             Console.WriteLine("1) Sí");
             Console.WriteLine("0) No");
             int.TryParse(Console.ReadLine(), out int fatality);
             if (fatality == 0)
             {
+                asci.mostrarPJ(pjSeleccionado);
                 Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
             else if (fatality == 1)
@@ -297,6 +302,7 @@ namespace combates
                 {
                     Console.WriteLine("Falló la combinación. No se realizó la fatality.");
                     Console.WriteLine("No recibiste una bonificación.");
+                    asci.mostrarPJ(pjSeleccionado);
                     Console.WriteLine("---------COMBATE FINALIZADO--------");
                 }
                 else
@@ -305,6 +311,7 @@ namespace combates
                     Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
                     pjSeleccionado.Caracteristicas.Fuerza += 5;
                     pjSeleccionado.Caracteristicas.Armadura += 5;
+                    asci.mostrarPJ(pjSeleccionado);
                     Console.WriteLine("---------COMBATE FINALIZADO--------");
                 }
             }

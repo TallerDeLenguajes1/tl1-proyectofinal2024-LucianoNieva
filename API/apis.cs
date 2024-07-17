@@ -65,7 +65,7 @@ namespace CrearApi
                 }
                 break;
             case "Rain":
-                if (weather.Contains("Rain"))
+                if (weather.Contains("Rain") || weather.Contains("Rain shower"))
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
@@ -99,7 +99,7 @@ namespace CrearApi
                 break;
             case "Blaze":
             case "Scorpion":
-                if (weather.Contains("Sunny"))
+                if (weather.Contains("Sunny") || weather.Contains("Mostly sunny"))
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;
