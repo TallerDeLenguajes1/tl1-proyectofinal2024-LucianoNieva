@@ -284,6 +284,7 @@ namespace combates
         private static void ManejarFatality(Personaje pjSeleccionado)
         {
             var asci = new Ascii();
+            asci.Fatality();
             Console.WriteLine("\nDesea realizar una fatality?");
             Console.WriteLine("1) Sí");
             Console.WriteLine("0) No");

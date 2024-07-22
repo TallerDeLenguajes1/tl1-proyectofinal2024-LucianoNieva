@@ -13,14 +13,14 @@ namespace CrearApi
         private static readonly string apiKey = "6msprufjk45ihq3e3nvf1mfxj98kg88kplvzbd7v";
         private static readonly List<string> placeIds = new List<string>
         {
-            "london", "new-york", "tokyo", "paris", "berlin", "sydney", "mumbai"
+            "london", "tokyo", "paris", "berlin", "sydney", "mumbai"
         };
 
         private static string GetRandomPlaceId()
         {
             var random = new Random();
             int index = random.Next(placeIds.Count);
-            return placeIds[index];
+            return placeIds[1];
         }
 
         public static async Task<string> GetWeatherAsync()
@@ -99,7 +99,7 @@ namespace CrearApi
                 break;
             case "Blaze":
             case "Scorpion":
-                if (weather.Contains("Sunny") || weather.Contains("Mostly sunny"))
+                if (weather.Contains("Sunny") || weather.Contains("Mostly sunny") || weather.Contains("Partly sunny"))
                 {
                     character.Caracteristicas.Fuerza += 10;
                     character.Caracteristicas.Armadura += 5;

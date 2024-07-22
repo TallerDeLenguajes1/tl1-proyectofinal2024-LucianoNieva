@@ -30,13 +30,13 @@ namespace MenuIteractivo
                             break;
 
                         case 2:
-                            var pjGanador = await combate.pelea1v1(pjFabricados, pjFabricados); // Agregado await
+                            var pjGanador = await combate.pelea1v1(pjFabricados, pjFabricados); 
                             listGanadores.Add(pjGanador);
                             historial.GuardarGanador(listGanadores, archivoHistorial);
                             break;
 
                         case 3:
-                            var pjGanador2 = await combate.combateTorre(pjFabricados, pjFabricados, combate); // Agregado await
+                            var pjGanador2 = await combate.combateTorre(pjFabricados, pjFabricados, combate);
                             listGanadores.Add(pjGanador2);
                             historial.GuardarGanador(listGanadores, archivoHistorial);
                             break;
