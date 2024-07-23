@@ -20,7 +20,7 @@ namespace CrearApi
         {
             var random = new Random();
             int index = random.Next(placeIds.Count);
-            return placeIds[1];
+            return placeIds[index];
         }
 
         public static async Task<string> GetWeatherAsync()
@@ -49,101 +49,88 @@ namespace CrearApi
         }
 
         public static void AdjustCharacterStats(Personaje character, string weather)
-    {
-        switch (character.Datos.Name)
         {
-            case "SubZero":
-            case "Frost":
-                if (weather.Contains("Clear") || weather.Contains("Snow") || weather.Contains("Partly clear"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Rain":
-                if (weather.Contains("Rain") || weather.Contains("Rain shower"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima lluvioso.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Fujin":
-                if (weather.Contains("Wind") || weather.Contains("Windy"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima ventoso.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Raiden":
-                if (weather.Contains("Thunderstorm"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima de la tormenta.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Blaze":
-            case "Scorpion":
-                if (weather.Contains("Sunny") || weather.Contains("Mostly sunny") || weather.Contains("Partly sunny"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima caluroso.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Tremor":
-                if (weather.Contains("Earthquake"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido a un terremoto.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Ermac":
-                if (weather.Contains("Energetic"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
-            case "Kabal":
-                if (weather.Contains("Windy") || weather.Contains("Wind"))
-                {
-                    character.Caracteristicas.Fuerza += 10;
-                    character.Caracteristicas.Armadura += 5;
-                    Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +10 de armadura aumentadas debido al clima frío.");
-                }else
-                {
-                    Console.WriteLine($"\n{character.Datos.Name} no obtienes bonificacion del clima");
-                }
-                break;
+            bool bonus = false;
+
+            switch (character.Datos.Name)
+            {
+                case "SubZero":
+                case "Frost":
+                    if (weather.Contains("Clear") || weather.Contains("Snow") || weather.Contains("Partly clear"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Rain":
+                    if (weather.Contains("Rain") || weather.Contains("Rain shower"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Fujin":
+                    if (weather.Contains("Wind") || weather.Contains("Windy"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Raiden":
+                    if (weather.Contains("Thunderstorm"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Blaze":
+                case "Scorpion":
+                    if (weather.Contains("Sunny") || weather.Contains("Mostly sunny") || weather.Contains("Partly sunny"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Tremor":
+                    if (weather.Contains("Earthquake"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Ermac":
+                    if (weather.Contains("Energetic"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+                case "Kabal":
+                    if (weather.Contains("Windy") || weather.Contains("Wind"))
+                    {
+                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Armadura += 5;
+                        bonus = true;
+                    }
+                    break;
+            }
+
+            if (bonus)
+            {
+                Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +5 de armadura aumentadas debido al clima.");
+            }
+            else
+            {
+                Console.WriteLine($"{character.Datos.Name} no obtiene bonificación del clima.");
+            }
         }
-    }
     }
 
 }

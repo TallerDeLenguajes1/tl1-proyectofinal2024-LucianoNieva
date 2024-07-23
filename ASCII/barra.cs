@@ -16,7 +16,7 @@ namespace barra
                 Console.Write($"] {i * 2}%");
                 Thread.Sleep(50); // Pausa de 50ms entre cada incremento
             }
-            Console.WriteLine("\nCarga completa!");
+            Console.Clear();
         }
     }
 }

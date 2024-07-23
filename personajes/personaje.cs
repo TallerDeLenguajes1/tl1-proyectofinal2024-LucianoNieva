@@ -72,16 +72,16 @@ namespace personaje
 
     public enum NombrePersonajes
     {
-    SubZero,
-    Scorpion,
-    Raiden,
-    Rain,
-    Fujin,
-    Blaze,
-    Tremor,
-    Ermac,
-    Frost,
-    Kabal
+    SUBZERO,
+    SCORPION,
+    RAIDEN,
+    RAIN,
+    FUJIN,
+    BLAZE,
+    TREMOR,
+    ERMAC,
+    FROST,
+    KABAL
     }
 
     public enum Tipo
