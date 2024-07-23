@@ -44,14 +44,10 @@ namespace MenuInteractivo
                             fabrica.MostrarPersonaje(pjFabricados);
                             break;
                         case 1:
-                            var pjGanador = await combate.pelea1v1(pjFabricados);
-                            listGanadores.Add(pjGanador);
-                            historial.GuardarGanador(listGanadores, archivoHistorial);
+                            await combate.RealizarCombate1v1(pjFabricados,combate,listGanadores,historial,archivoHistorial);
                             break;
                         case 2:
-                            var pjGanador2 = await combate.combateTorre(pjFabricados, pjFabricados, combate);
-                            listGanadores.Add(pjGanador2);
-                            historial.GuardarGanador(listGanadores, archivoHistorial);
+                            await combate.combateTorre(pjFabricados, pjFabricados, combate,listGanadores,historial,archivoHistorial);
                             break;
                         case 3:
                             var leerPJ = historial.LeerGanador(archivoHistorial);

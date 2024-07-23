@@ -3,6 +3,7 @@ using personaje;
 using seleccionPersonaje;
 using CrearApi;
 using ascii;
+using JSON;
 
 namespace combates
 {
@@ -32,7 +33,7 @@ namespace combates
             await Task.Delay(1000); // Pausa para mostrar la acción
         }
 
-        private static void  controlarSaludNoNegativa(Caracteristicas caracteristicas2)
+        private static void controlarSaludNoNegativa(Caracteristicas caracteristicas2)
         {
             if (caracteristicas2.Salud < 0)
             {
@@ -40,16 +41,140 @@ namespace combates
             }
         }
 
-        public async Task<Personaje> pelea1v1(List<Personaje> personajes)
+        public async Task RealizarCombate1v1(List<Personaje> personajes, Combate combate, List<Personaje> listGanadores, HistorialJson historial, string archivoHistorial)
+        {
+            Console.WriteLine("¿Quieres jugar contra un bot o un amigo?");
+            Console.WriteLine("1) Contra un bot");
+            Console.WriteLine("2) Contra un amigo");
+            int.TryParse(Console.ReadLine(), out int opcion);
+
+            if (opcion == 1)
+            {
+                var pjGanador = await combate.pelea1v1(personajes);
+                guardarGanador(listGanadores, historial, archivoHistorial, pjGanador);
+            }
+            else if (opcion == 2)
+            {
+                var pjGanador = await combate.pelea1v1Amigo(personajes);
+                guardarGanador(listGanadores, historial, archivoHistorial, pjGanador);
+            }
+            else
+            {
+                Console.WriteLine("Opción no válida.");
+            }
+        }
+
+        public void guardarGanador(List<Personaje> listGanadores, HistorialJson historial, string archivoHistorial, Personaje pjGanador)
+        {
+            listGanadores.Add(pjGanador);
+            historial.GuardarGanador(listGanadores, archivoHistorial);
+        }
+
+        public async Task<Personaje> pelea1v1Amigo(List<Personaje> personajes)
         {
             var seleccion = new Seleccion();
             Personaje pjSeleccionado = SeleccionarPJ(personajes, seleccion);
             Personaje pjSeleccionado2 = SeleccionarPJ(personajes, seleccion, pjSeleccionado);
 
-            await Task.Delay(500);
+            await Task.Delay(1500);
             Console.Clear();
             Console.WriteLine($"{pjSeleccionado.Datos.Name} VS {pjSeleccionado2.Datos.Name}");
             await verificarBonificacionClima(pjSeleccionado, pjSeleccionado2);
+
+            var asci = new Ascii();
+            
+            while (pjSeleccionado.Caracteristicas.Salud > 0 && pjSeleccionado2.Caracteristicas.Salud > 0)
+            {
+                
+                Console.WriteLine($"\n{pjSeleccionado.Datos.Name}");
+                Console.WriteLine("¿Qué quieres hacer?");
+                Console.WriteLine("1) Atacar");
+                Console.WriteLine("2) Defender");
+                int.TryParse(Console.ReadLine(), out int accion);
+
+                if (accion == 1)
+                {
+                    await realizarAtaqueYDefensa(pjSeleccionado, pjSeleccionado2);
+                    if (pjSeleccionado2.Caracteristicas.Salud <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("El ganador fue " + pjSeleccionado.Datos.Name);
+                        asci.mostrarPJ(pjSeleccionado);
+                        pjSeleccionado.Caracteristicas.Salud = 100;
+                        pjSeleccionado2.Caracteristicas.Salud = 100;
+                        ManejarFatality(pjSeleccionado);
+                        return pjSeleccionado;
+                    }
+                }
+                else if (accion == 2)
+                {
+                    Console.WriteLine("Defendiendo...");
+                    await realizarAtaqueYDefensa(pjSeleccionado2, pjSeleccionado);
+                    await Task.Delay(1000);
+
+                    if (pjSeleccionado.Caracteristicas.Salud <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("El ganador fue " + pjSeleccionado2.Datos.Name);
+                        asci.mostrarPJ(pjSeleccionado2);
+                        pjSeleccionado.Caracteristicas.Salud = 100;
+                        pjSeleccionado2.Caracteristicas.Salud = 100;
+                        return pjSeleccionado2;
+                    }
+                }
+                
+                Console.WriteLine($"\n{pjSeleccionado2.Datos.Name}");
+                Console.WriteLine("¿Qué quieres hacer?");
+                Console.WriteLine("1) Atacar");
+                Console.WriteLine("2) Defender");
+                int.TryParse(Console.ReadLine(), out int accion2);
+
+                if (accion2 == 1)
+                {
+                    await realizarAtaqueYDefensa(pjSeleccionado2, pjSeleccionado);
+                    if (pjSeleccionado.Caracteristicas.Salud <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("El ganador fue " + pjSeleccionado2.Datos.Name);
+                        asci.mostrarPJ(pjSeleccionado2);
+                        pjSeleccionado2.Caracteristicas.Salud = 100;
+                        pjSeleccionado.Caracteristicas.Salud = 100;
+                        ManejarFatality(pjSeleccionado2);
+                        return pjSeleccionado2;
+                    }
+                }
+                else if (accion2 == 2)
+                {
+                    Console.WriteLine("Defendiendo...");
+                    await realizarAtaqueYDefensa(pjSeleccionado, pjSeleccionado2);
+                    await Task.Delay(1000);
+
+                    if (pjSeleccionado2.Caracteristicas.Salud <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("El ganador fue " + pjSeleccionado.Datos.Name);
+                        asci.mostrarPJ(pjSeleccionado);
+                        pjSeleccionado.Caracteristicas.Salud = 100;
+                        pjSeleccionado2.Caracteristicas.Salud = 100;
+                        return pjSeleccionado;
+                    }
+                }
+
+            }
+            return null;
+        }
+
+
+        public async Task<Personaje> pelea1v1(List<Personaje> personajes)
+        {
+            var seleccion = new Seleccion();
+            Personaje pjSeleccionado = SeleccionarPJ(personajes, seleccion);
+            Personaje pjSeleccionado2 = SeleccionarPJ(personajes, seleccion, pjSeleccionado);
+            await Task.Delay(1000);
+            Console.Clear();
+            Console.WriteLine($"{pjSeleccionado.Datos.Name} VS {pjSeleccionado2.Datos.Name}");
+            await verificarBonificacionClima(pjSeleccionado, pjSeleccionado2);
+
             return await realizarCombate(pjSeleccionado, pjSeleccionado2);
         }
 
@@ -87,7 +212,7 @@ namespace combates
             return null;
         }
 
-        public async Task<Personaje> combateTorre(List<Personaje> pjPrincipal, List<Personaje> PjSecundario, Combate combate)
+        public async Task<Personaje> combateTorre(List<Personaje> pjPrincipal, List<Personaje> PjSecundario, Combate combate, List<Personaje> listGanadores, HistorialJson historial, string archivoHistorial)
         {
             var random = new Random();
             var seleccion = new Seleccion();
@@ -121,6 +246,7 @@ namespace combates
 
             Console.WriteLine("\n¡Felicidades, ganaste el torneo!");
             Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} ganó todos los niveles");
+            guardarGanador(listGanadores, historial, archivoHistorial, pjSeleccionado);
             Console.WriteLine("-------------------------------------------------------------");
             return pjSeleccionado;
         }
@@ -213,5 +339,7 @@ namespace combates
                 return SeleccionarPJ(personajes, seleccion, pjExistente);
             }
         }
+
+
     }
 }
