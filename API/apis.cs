@@ -37,8 +37,6 @@ namespace CrearApi
                 // Deserializar el JSON usando Newtonsoft.Json
                 var data = JObject.Parse(responseBody);
                 string weather = data["current"]["summary"].ToString(); // Obtener el resumen del clima actual
-
-                Console.WriteLine($"El clima en esta batalla es: {weather}");
                 return weather;
             }
             catch (Exception ex)

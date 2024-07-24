@@ -18,7 +18,7 @@ class Program
         var pjFabricados = fabrica.crearPersonajes(10);
         var listGanadores = new List<Personaje>();
         var mostrarAscii = new Ascii();
-
+        
         pjFabricados = GuardarYLeer.GuardarYLeer(pjFabricados, archivoPersonajes);
 
         Console.WriteLine("\nCargando el juego...\n");

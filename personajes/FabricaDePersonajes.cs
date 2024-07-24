@@ -27,7 +27,7 @@ namespace fabrica
             var fechaNac = DateTime.Now.AddYears(-edad);
             int Salud = 100;
             int velocidad = random.Next(1, 11);
-            int destreza = random.Next(1, 6);
+            int destreza = random.Next(1, 11);
             int fuerza = random.Next(1, 11);
             int nivel = random.Next(1, 11);
             int armadura = random.Next(1, 11);

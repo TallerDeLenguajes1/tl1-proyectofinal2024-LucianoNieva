@@ -82,10 +82,10 @@ namespace combates
             await verificarBonificacionClima(pjSeleccionado, pjSeleccionado2);
 
             var asci = new Ascii();
-            
+
             while (pjSeleccionado.Caracteristicas.Salud > 0 && pjSeleccionado2.Caracteristicas.Salud > 0)
             {
-                
+
                 Console.WriteLine($"\n{pjSeleccionado.Datos.Name}");
                 Console.WriteLine("¿Qué quieres hacer?");
                 Console.WriteLine("1) Atacar");
@@ -122,7 +122,7 @@ namespace combates
                         return pjSeleccionado2;
                     }
                 }
-                
+
                 Console.WriteLine($"\n{pjSeleccionado2.Datos.Name}");
                 Console.WriteLine("¿Qué quieres hacer?");
                 Console.WriteLine("1) Atacar");
@@ -218,31 +218,44 @@ namespace combates
             var seleccion = new Seleccion();
             Personaje pjSeleccionado = SeleccionarPJ(pjPrincipal, seleccion);
             int nivel = seleccionarNivel();
+            int contador = 0;
+
+            var pjOponentes = new List<Personaje>();
 
             for (int i = 0; i < nivel; i++)
             {
                 Personaje pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
 
-                while (pjSeleccionado2 == pjSeleccionado)
+                while (pjSeleccionado2 == pjSeleccionado || pjOponentes.Contains(pjSeleccionado2))
                 {
                     pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
                 }
 
-                Console.WriteLine($"\nNivel {i + 1}: {pjSeleccionado.Datos.Name} vs {pjSeleccionado2.Datos.Name}");
-                await verificarBonificacionClima(pjSeleccionado, pjSeleccionado2);
+                pjOponentes.Add(pjSeleccionado2);
+            }
 
-                var pjGanador = await realizarCombate(pjSeleccionado, pjSeleccionado2);
+            foreach (var oponente in pjOponentes)
+            {
+                
+
+                Console.WriteLine($"\nNivel {contador + 1}: {pjSeleccionado.Datos.Name} vs {oponente.Datos.Name}");
+                await verificarBonificacionClima(pjSeleccionado, oponente);
+
+                var pjGanador = await realizarCombate(pjSeleccionado, oponente);
 
                 if (pjGanador == pjSeleccionado)
                 {
-                    Console.WriteLine($"\nEl personaje {pjGanador.Datos.Name} ganó el nivel {i + 1}");
+                    Console.WriteLine($"\nEl personaje {pjGanador.Datos.Name} ganó el nivel {contador + 1}");
                 }
                 else
                 {
-                    Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} perdió en el nivel {i + 1}");
+                    Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} perdió en el nivel {contador + 1}");
                     return pjGanador;
                 }
+
+                contador++;
             }
+
 
             Console.WriteLine("\n¡Felicidades, ganaste el torneo!");
             Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} ganó todos los niveles");
@@ -251,95 +264,99 @@ namespace combates
             return pjSeleccionado;
         }
 
-        private async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)
+
+    
+
+    private async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)
+    {
+        string weather = await WeatherApi.GetWeatherAsync();
+        Console.WriteLine($"El clima en esta batalla es: {weather}");
+        WeatherApi.AdjustCharacterStats(pjSeleccionado, weather);
+        WeatherApi.AdjustCharacterStats(pjSeleccionado2, weather);
+    }
+
+    private static int seleccionarNivel()
+    {
+        Console.WriteLine("\nSeleccione la longitud de la torre:");
+        Console.WriteLine("1. Torre corta (3 niveles)");
+        Console.WriteLine("2. Torre común (5 niveles)");
+        Console.WriteLine("3. Torre larga (7 niveles)");
+        Console.Write("Seleccione una opción: ");
+
+        int.TryParse(Console.ReadLine(), out int nivel);
+
+        return nivel switch
         {
-            string weather = await WeatherApi.GetWeatherAsync();
-            WeatherApi.AdjustCharacterStats(pjSeleccionado, weather);
-            WeatherApi.AdjustCharacterStats(pjSeleccionado2, weather);
+            1 => 3,
+            2 => 5,
+            3 => 7,
+            _ => 3, // Por defecto a la torre corta
+        };
+    }
+
+    private static void ManejarFatality(Personaje pjSeleccionado)
+    {
+        var asci = new Ascii();
+        asci.Fatality();
+        Console.WriteLine("\nDesea realizar una fatality?");
+        Console.WriteLine("1) Sí");
+        Console.WriteLine("0) No");
+        int.TryParse(Console.ReadLine(), out int fatality);
+        if (fatality == 0)
+        {
+            asci.mostrarPJ(pjSeleccionado);
+            Console.WriteLine("---------COMBATE FINALIZADO--------");
         }
-
-        private static int seleccionarNivel()
+        else if (fatality == 1)
         {
-            Console.WriteLine("\nSeleccione la longitud de la torre:");
-            Console.WriteLine("1. Torre corta (3 niveles)");
-            Console.WriteLine("2. Torre común (5 niveles)");
-            Console.WriteLine("3. Torre larga (7 niveles)");
-            Console.Write("Seleccione una opción: ");
+            var random2 = new Random();
+            int i = 1;
 
-            int.TryParse(Console.ReadLine(), out int nivel);
-
-            return nivel switch
+            if (i == 0)
             {
-                1 => 3,
-                2 => 5,
-                3 => 7,
-                _ => 3, // Por defecto a la torre corta
-            };
-        }
-
-        private static void ManejarFatality(Personaje pjSeleccionado)
-        {
-            var asci = new Ascii();
-            asci.Fatality();
-            Console.WriteLine("\nDesea realizar una fatality?");
-            Console.WriteLine("1) Sí");
-            Console.WriteLine("0) No");
-            int.TryParse(Console.ReadLine(), out int fatality);
-            if (fatality == 0)
-            {
+                Console.WriteLine("Falló la combinación. No se realizó la fatality.");
+                Console.WriteLine("No recibiste una bonificación.");
                 asci.mostrarPJ(pjSeleccionado);
                 Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
-            else if (fatality == 1)
-            {
-                var random2 = new Random();
-                int i = random2.Next(0, 2);
-
-                if (i == 0)
-                {
-                    Console.WriteLine("Falló la combinación. No se realizó la fatality.");
-                    Console.WriteLine("No recibiste una bonificación.");
-                    asci.mostrarPJ(pjSeleccionado);
-                    Console.WriteLine("---------COMBATE FINALIZADO--------");
-                }
-                else
-                {
-                    Console.WriteLine("La fatality se realizó con éxito.");
-                    Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
-                    pjSeleccionado.Caracteristicas.Fuerza += 5;
-                    pjSeleccionado.Caracteristicas.Armadura += 5;
-                    asci.mostrarPJ(pjSeleccionado);
-                    Console.WriteLine("---------COMBATE FINALIZADO--------");
-                }
-            }
-        }
-
-        private static Personaje SeleccionarPJ(List<Personaje> personajes, Seleccion seleccion, Personaje pjExistente = null)
-        {
-            if (pjExistente == null)
-            {
-                Console.WriteLine("\nSeleccione el id del personaje que desea usar:");
-            }
             else
             {
-                Console.WriteLine("\nSeleccione el id del personaje que será su oponente:");
-            }
-
-            int.TryParse(Console.ReadLine(), out int op);
-
-            if (op >= 1 && op <= 10)
-            {
-                var pjSeleccionado = seleccion.seleccionarPersonaje(personajes, op);
-                seleccion.personajeSeleccionado(pjSeleccionado);
-                return pjSeleccionado;
-            }
-            else
-            {
-                Console.WriteLine("\nNo seleccionó un ID correcto.");
-                return SeleccionarPJ(personajes, seleccion, pjExistente);
+                Console.WriteLine("La fatality se realizó con éxito.");
+                Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
+                pjSeleccionado.Caracteristicas.Fuerza += 5;
+                pjSeleccionado.Caracteristicas.Armadura += 5;
+                asci.mostrarPJ(pjSeleccionado);
+                Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
         }
-
-
     }
+
+    private static Personaje SeleccionarPJ(List<Personaje> personajes, Seleccion seleccion, Personaje pjExistente = null)
+    {
+        if (pjExistente == null)
+        {
+            Console.WriteLine("\nSeleccione el id del personaje que desea usar:");
+        }
+        else
+        {
+            Console.WriteLine("\nSeleccione el id del personaje que será su oponente:");
+        }
+
+        int.TryParse(Console.ReadLine(), out int op);
+
+        if (op >= 1 && op <= 10)
+        {
+            var pjSeleccionado = seleccion.seleccionarPersonaje(personajes, op);
+            seleccion.personajeSeleccionado(pjSeleccionado);
+            return pjSeleccionado;
+        }
+        else
+        {
+            Console.WriteLine("\nNo seleccionó un ID correcto.");
+            return SeleccionarPJ(personajes, seleccion, pjExistente);
+        }
+    }
+
+
+}
 }
