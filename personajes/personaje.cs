@@ -86,12 +86,11 @@ namespace personaje
 
     public enum Tipo
     {
-        Ninja,
-        Hechicero,
         DiosDelTrueno,
-        MonjeShaolin,
-        ArtesMarciales,
-        Comandante,
-        LiderClan
+        DiosDelViento,
+        MaestroDelHielo,
+        MaestroDelFuego,
+        MaestroDeLaTierra,
+        MaestroDeLasNubes,
     }
 }

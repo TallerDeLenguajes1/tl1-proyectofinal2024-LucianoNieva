@@ -30,7 +30,7 @@ namespace combates
 
             Console.WriteLine($"La salud de {datosPj2.Name} es de: {caracteristicas2.Salud}");
 
-            await Task.Delay(1000); // Pausa para mostrar la acción
+            await Task.Delay(500); // Pausa para mostrar la acción
         }
 
         private static void controlarSaludNoNegativa(Caracteristicas caracteristicas2)
@@ -291,7 +291,7 @@ namespace combates
             1 => 3,
             2 => 5,
             3 => 7,
-            _ => 3, // Por defecto a la torre corta
+            _ => 3,
         };
     }
 

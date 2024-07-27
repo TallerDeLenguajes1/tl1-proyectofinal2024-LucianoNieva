@@ -36,8 +36,8 @@ namespace CrearApi
 
                 // Deserializar el JSON usando Newtonsoft.Json
                 var data = JObject.Parse(responseBody);
-                string weather = data["current"]["summary"].ToString(); // Obtener el resumen del clima actual
-                return weather;
+                return data["current"]["summary"].ToString(); // Obtener el resumen del clima actual
+                
             }
             catch (Exception ex)
             {
@@ -50,10 +50,9 @@ namespace CrearApi
         {
             bool bonus = false;
 
-            switch (character.Datos.Name)
+            switch (character.Datos.Tipo)
             {
-                case "SubZero":
-                case "Frost":
+                case "MaestroDelHielo":
                     if (weather.Contains("Clear") || weather.Contains("Snow") || weather.Contains("Partly clear"))
                     {
                         character.Caracteristicas.Fuerza += 10;
@@ -61,15 +60,15 @@ namespace CrearApi
                         bonus = true;
                     }
                     break;
-                case "Rain":
-                    if (weather.Contains("Rain") || weather.Contains("Rain shower"))
+                case "DiosDelTrueno":
+                    if (weather.Contains("Rain") || weather.Contains("Rain shower") || weather.Contains("Thunderstorm"))
                     {
-                        character.Caracteristicas.Fuerza += 10;
+                        character.Caracteristicas.Fuerza += 10; 
                         character.Caracteristicas.Armadura += 5;
                         bonus = true;
                     }
                     break;
-                case "Fujin":
+                case "DiosDelViento":
                     if (weather.Contains("Wind") || weather.Contains("Windy"))
                     {
                         character.Caracteristicas.Fuerza += 10;
@@ -77,16 +76,7 @@ namespace CrearApi
                         bonus = true;
                     }
                     break;
-                case "Raiden":
-                    if (weather.Contains("Thunderstorm"))
-                    {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
-                        bonus = true;
-                    }
-                    break;
-                case "Blaze":
-                case "Scorpion":
+                case "MaestroDelFuego":
                     if (weather.Contains("Sunny") || weather.Contains("Mostly sunny") || weather.Contains("Partly sunny"))
                     {
                         character.Caracteristicas.Fuerza += 10;
@@ -94,7 +84,7 @@ namespace CrearApi
                         bonus = true;
                     }
                     break;
-                case "Tremor":
+                case "MaestroDeLaTierra":
                     if (weather.Contains("Earthquake"))
                     {
                         character.Caracteristicas.Fuerza += 10;
@@ -102,16 +92,8 @@ namespace CrearApi
                         bonus = true;
                     }
                     break;
-                case "Ermac":
-                    if (weather.Contains("Energetic"))
-                    {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
-                        bonus = true;
-                    }
-                    break;
-                case "Kabal":
-                    if (weather.Contains("Windy") || weather.Contains("Wind"))
+                case "MaestroDeLasNubes":
+                    if (weather.Contains("Cloudy") || weather.Contains("Overcast") || weather.Contains("Mostly Cloudy"))
                     {
                         character.Caracteristicas.Fuerza += 10;
                         character.Caracteristicas.Armadura += 5;
@@ -123,8 +105,7 @@ namespace CrearApi
             if (bonus)
             {
                 Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +5 de armadura aumentadas debido al clima.");
-            }
-            else
+            }else
             {
                 Console.WriteLine($"{character.Datos.Name} no obtiene bonificación del clima.");
             }
