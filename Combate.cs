@@ -191,6 +191,7 @@ namespace combates
                     Console.WriteLine("El ganador fue " + p1.Datos.Name);
                     p1.Caracteristicas.Salud = 100;
                     p2.Caracteristicas.Salud = 100;
+                    asci.Finish();
                     ManejarFatality(p1);
                     return p1;
                 }
@@ -297,7 +298,6 @@ namespace combates
     private static void ManejarFatality(Personaje pjSeleccionado)
     {
         var asci = new Ascii();
-        asci.Fatality();
         Console.WriteLine("\nDesea realizar una fatality?");
         Console.WriteLine("1) Sí");
         Console.WriteLine("0) No");
@@ -321,7 +321,7 @@ namespace combates
             }
             else
             {
-                Console.WriteLine("La fatality se realizó con éxito.");
+                asci.Fatality();
                 Console.WriteLine($"Recibiste una bonificación + 5 de fuerza y + 5 de armadura.");
                 pjSeleccionado.Caracteristicas.Fuerza += 5;
                 pjSeleccionado.Caracteristicas.Armadura += 5;
