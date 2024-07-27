@@ -20,7 +20,7 @@ namespace combates
             int ataque = caracteristicas.Destreza * caracteristicas.Fuerza * caracteristicas.Nivel;
             int efectividad = random.Next(1, 101);
             int defensa = caracteristicas2.Armadura * caracteristicas2.Velocidad;
-            const int Ajuste = 500;
+            const int Ajuste = 4000;
 
             int danioProvocado = ((ataque * efectividad) - defensa) / Ajuste;
             Console.WriteLine($"\nEl atacante {datosPj.Name} realizó un daño de: {danioProvocado}");
@@ -310,7 +310,7 @@ namespace combates
         else if (fatality == 1)
         {
             var random2 = new Random();
-            int i = 1;
+            int i = random2.Next(0,2);
 
             if (i == 0)
             {
