@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using personaje;
 using fabrica;
 using JSON;
@@ -13,16 +14,16 @@ namespace Juego
         public static async Task Iniciar()
         {
             var fabrica = new FabricaDePersonajes();
-            var GuardarYLeer = new ArchivoPersonajes();
+            var gestionPersonajes = new GestionPersonajes();
             var historial = new HistorialJson();
             var combate = new Combate();
             var archivoPersonajes = @"personajes.json";
             var archivoHistorial = @"historial.json";
-            var pjFabricados = await fabrica.CrearPersonajes(10);
             var listGanadores = new List<Personaje>();
             var mostrarAscii = new Ascii();
-            string direccionMusica = @"C:\Users\lucia\OneDrive\Escritorio\tallertp\tl1-proyectofinal2024-LucianoNieva\audio\videoplayback.wav";
-            pjFabricados = GuardarYLeer.GuardarYLeer(pjFabricados, archivoPersonajes);
+            string direccionMusica = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\audio\videoplayback.wav";
+
+            var pjFabricados = await gestionPersonajes.CargarOcrearPersonajes(archivoPersonajes);
 
             Console.WriteLine("\nCargando el juego...\n");
             LoadingBar.Show();
@@ -35,4 +36,3 @@ namespace Juego
         }
     }
 }
-

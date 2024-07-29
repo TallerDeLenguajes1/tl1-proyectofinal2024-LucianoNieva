@@ -222,22 +222,15 @@ namespace combates
             int contador = 0;
 
             var pjOponentes = new List<Personaje>();
+            CargarOponentes(PjSecundario, random, pjSeleccionado, nivel, pjOponentes);
+            return await realizarCombateTorre(listGanadores, historial, archivoHistorial, pjSeleccionado, contador, pjOponentes);
+        }
 
-            for (int i = 0; i < nivel; i++)
-            {
-                Personaje pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
-
-                while (pjSeleccionado2 == pjSeleccionado || pjOponentes.Contains(pjSeleccionado2))
-                {
-                    pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
-                }
-
-                pjOponentes.Add(pjSeleccionado2);
-            }
-
+        private async Task<Personaje> realizarCombateTorre(List<Personaje> listGanadores, HistorialJson historial, string archivoHistorial, Personaje pjSeleccionado, int contador, List<Personaje> pjOponentes)
+        {
             foreach (var oponente in pjOponentes)
             {
-                
+
 
                 Console.WriteLine($"\nNivel {contador + 1}: {pjSeleccionado.Datos.Name} vs {oponente.Datos.Name}");
                 await verificarBonificacionClima(pjSeleccionado, oponente);
@@ -265,10 +258,34 @@ namespace combates
             return pjSeleccionado;
         }
 
+        private static void CargarOponentes(List<Personaje> PjSecundario, Random random, Personaje pjSeleccionado, int nivel, List<Personaje> pjOponentes)
+        {
+            for (int i = 0; i < nivel; i++)
+            {
+                Personaje pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
 
-    
+                while (pjSeleccionado2 == pjSeleccionado || pjOponentes.Contains(pjSeleccionado2))
+                {
+                    pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
+                }
 
-    private async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)
+                pjOponentes.Add(pjSeleccionado2);
+            }
+
+            int cont = 0;
+            Console.Clear();
+            Console.WriteLine("Estos seran tus oponentes!\n");
+            foreach (var item in pjOponentes)
+            {
+                Console.WriteLine($"Nivel {1 + cont} {item.Datos.Name} ");
+                cont++;
+            }
+
+        }
+
+
+
+        private async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)
     {
         string weather = await WeatherApi.GetWeatherAsync();
         Console.WriteLine($"El clima en esta batalla es: {weather}");
