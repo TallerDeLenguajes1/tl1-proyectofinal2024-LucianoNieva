@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
 using personaje;
 using fabrica;
 
@@ -98,7 +94,6 @@ namespace JSON
 
     public class GestionPersonajes
     {
-        private ArchivoPersonajes archivoPersonajes = new ArchivoPersonajes();
         private PersonajesJSON personajesJSON = new PersonajesJSON();
         private FabricaDePersonajes fabrica = new FabricaDePersonajes();
 
@@ -118,7 +113,7 @@ namespace JSON
                 else
                 {
                     Console.WriteLine("No hay personajes cargados. Seleccione la opción de cargar personajes nuevos.");
-                    return await CargarOcrearPersonajes(archivo); // Recurre a la misma función para volver a preguntar
+                    return await CargarOcrearPersonajes(archivo);
                 }
             }
             else if (opcion == 2)
@@ -130,7 +125,7 @@ namespace JSON
             else
             {
                 Console.WriteLine("Opción no válida.");
-                return await CargarOcrearPersonajes(archivo); // Recurre a la misma función para volver a preguntar
+                return await CargarOcrearPersonajes(archivo);
             }
         }
     }

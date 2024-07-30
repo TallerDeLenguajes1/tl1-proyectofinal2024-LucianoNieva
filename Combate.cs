@@ -20,7 +20,7 @@ namespace combates
             int ataque = caracteristicas.Destreza * caracteristicas.Fuerza * caracteristicas.Nivel;
             int efectividad = random.Next(1, 101);
             int defensa = caracteristicas2.Armadura * caracteristicas2.Velocidad;
-            const int Ajuste = 4000;
+            const int Ajuste = 2000;
 
             int danioProvocado = ((ataque * efectividad) - defensa) / Ajuste;
             Console.WriteLine($"\nEl atacante {datosPj.Name} realizó un daño de: {danioProvocado}");
@@ -30,7 +30,7 @@ namespace combates
 
             Console.WriteLine($"La salud de {datosPj2.Name} es de: {caracteristicas2.Salud}");
 
-            await Task.Delay(500); // Pausa para mostrar la acción
+            await Task.Delay(250); // Pausa para mostrar la acción
         }
 
         private static void controlarSaludNoNegativa(Caracteristicas caracteristicas2)
@@ -102,7 +102,7 @@ namespace combates
                         asci.mostrarPJ(pjSeleccionado);
                         pjSeleccionado.Caracteristicas.Salud = 100;
                         pjSeleccionado2.Caracteristicas.Salud = 100;
-                        ManejarFatality(pjSeleccionado);
+                        await ManejarFatality(pjSeleccionado);
                         return pjSeleccionado;
                     }
                 }
@@ -139,7 +139,7 @@ namespace combates
                         asci.mostrarPJ(pjSeleccionado2);
                         pjSeleccionado2.Caracteristicas.Salud = 100;
                         pjSeleccionado.Caracteristicas.Salud = 100;
-                        ManejarFatality(pjSeleccionado2);
+                        await ManejarFatality(pjSeleccionado2);
                         return pjSeleccionado2;
                     }
                 }
@@ -192,7 +192,7 @@ namespace combates
                     p1.Caracteristicas.Salud = 100;
                     p2.Caracteristicas.Salud = 100;
                     asci.Finish();
-                    ManejarFatality(p1);
+                    await ManejarFatality(p1);
                     return p1;
                 }
 
@@ -312,20 +312,12 @@ namespace combates
         };
     }
 
-    private static void ManejarFatality(Personaje pjSeleccionado)
+    private static async Task ManejarFatality(Personaje pjSeleccionado)
     {
         var asci = new Ascii();
-        Console.WriteLine("\nDesea realizar una fatality?");
-        Console.WriteLine("1) Sí");
-        Console.WriteLine("0) No");
-        int.TryParse(Console.ReadLine(), out int fatality);
-        if (fatality == 0)
-        {
-            asci.mostrarPJ(pjSeleccionado);
-            Console.WriteLine("---------COMBATE FINALIZADO--------");
-        }
-        else if (fatality == 1)
-        {
+        Console.WriteLine("\nRealizando FATALITY..");
+        await Task.Delay(1500);
+
             var random2 = new Random();
             int i = random2.Next(0,2);
 
@@ -346,7 +338,7 @@ namespace combates
                 Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
         }
-    }
+    
 
     private static Personaje SeleccionarPJ(List<Personaje> personajes, Seleccion seleccion, Personaje pjExistente = null)
     {
