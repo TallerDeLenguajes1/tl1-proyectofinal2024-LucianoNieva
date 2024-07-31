@@ -1,25 +1,38 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Media;
 
 namespace Soundtrack
 {
     public class Musica
     {
-        private SoundPlayer player;
+        private string _rutaArchivo;
+        private SoundPlayer _player;
 
-        public Musica(string filePath)
+        public Musica(string rutaArchivo)
         {
-            player = new SoundPlayer(filePath);
+            _rutaArchivo = rutaArchivo;
+            _player = new SoundPlayer(_rutaArchivo);
         }
+
+        [DllImport("winmm.dll")]
+        public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume);
 
         public void Play()
         {
-            player.PlayLooping(); // Para que el sonido se reproduzca en bucle
+            SetVolume(2500); // Ajusta este valor para cambiar el volumen (0 - 65535)
+            _player.PlayLooping();
         }
 
         public void Stop()
         {
-            player.Stop();
+            _player.Stop();
+        }
+
+        public void SetVolume(int volume)
+        {
+            uint newVolume = ((uint)volume & 0x0000ffff) | ((uint)volume << 16);
+            waveOutSetVolume(IntPtr.Zero, newVolume);
         }
     }
 }

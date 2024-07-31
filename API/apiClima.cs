@@ -8,7 +8,7 @@ using personaje;
 
 namespace CrearApi
 {
-    public class WeatherApi
+    public class ApiClima
     {
         private static readonly string apiKey = "6msprufjk45ihq3e3nvf1mfxj98kg88kplvzbd7v";
         private static readonly List<string> placeIds = new List<string>
@@ -23,7 +23,7 @@ namespace CrearApi
             return placeIds[index];
         }
 
-        public static async Task<string> GetWeatherAsync()
+        public static async Task<string> TraerInfoClima()
         {
             try
             {
@@ -46,7 +46,7 @@ namespace CrearApi
             }
         }
 
-        public static void AdjustCharacterStats(Personaje character, string weather)
+        public static void controlarClimaConPersonaje(Personaje character, string weather)
         {
             bool bonus = false;
 
@@ -55,48 +55,37 @@ namespace CrearApi
                 case "MaestroDelHielo":
                     if (weather.Contains("Clear") || weather.Contains("Snow") || weather.Contains("Partly clear"))
                     {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
                         bonus = true;
                     }
                     break;
                 case "DiosDelTrueno":
                     if (weather.Contains("Rain") || weather.Contains("Rain shower") || weather.Contains("Thunderstorm"))
                     {
-                        character.Caracteristicas.Fuerza += 10; 
-                        character.Caracteristicas.Armadura += 5;
                         bonus = true;
                     }
                     break;
                 case "DiosDelViento":
                     if (weather.Contains("Wind") || weather.Contains("Windy"))
                     {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
                         bonus = true;
                     }
                     break;
                 case "MaestroDelFuego":
                     if (weather.Contains("Sunny") || weather.Contains("Mostly sunny") || weather.Contains("Partly sunny"))
                     {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
                         bonus = true;
                     }
                     break;
                 case "MaestroDeLaTierra":
                     if (weather.Contains("Earthquake"))
                     {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
                         bonus = true;
                     }
                     break;
                 case "MaestroDeLasNubes":
                     if (weather.Contains("Cloudy") || weather.Contains("Overcast") || weather.Contains("Mostly Cloudy"))
                     {
-                        character.Caracteristicas.Fuerza += 10;
-                        character.Caracteristicas.Armadura += 5;
+                        
                         bonus = true;
                     }
                     break;
@@ -104,7 +93,9 @@ namespace CrearApi
 
             if (bonus)
             {
-                Console.WriteLine($"{character.Datos.Name} tiene +10 de fuerza y +5 de armadura aumentadas debido al clima.");
+                Console.WriteLine($"{character.Datos.Name} tiene +5 de fuerza y +5 de armadura aumentadas debido al clima.");
+                character.Caracteristicas.Fuerza += 5;
+                character.Caracteristicas.Armadura += 5;
             }else
             {
                 Console.WriteLine($"{character.Datos.Name} no obtiene bonificación del clima.");

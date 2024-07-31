@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using InfoPokeAPI;
+
+using InfoPokemonAPI;
 using personaje;
 
 namespace fabrica
@@ -34,12 +32,12 @@ namespace fabrica
 
             // Obtener datos de Pokémon
             int id_poke = random.Next(1, 151); // Asumiendo los primeros 150 Pokémon
-            Poke poke = await servicioWeb.GetData<Poke>($"https://pokeapi.co/api/v2/pokemon/{id_poke}");
+            Poke poke = await servicioWeb.TraerInformacionPokemon<Poke>($"https://pokeapi.co/api/v2/pokemon/{id_poke}");
 
-            velocidad = poke.stats[5].base_stat / 10;
-            armadura = poke.stats[3].base_stat /10;
-            destreza = poke.stats[2].base_stat / 10;
-            fuerza = poke.stats[1].base_stat / 10;
+            velocidad = poke.stats[5].base_stat/10;
+            armadura = poke.stats[3].base_stat/10;
+            destreza = poke.stats[2].base_stat/10;
+            fuerza = poke.stats[1].base_stat/10;
             nivel = poke.stats[0].base_stat/10;
 
 

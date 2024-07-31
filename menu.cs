@@ -10,7 +10,7 @@ namespace MenuInteractivo
     {
         private static int selectedIndex = 0;
 
-        public static async Task NewMethod(FabricaDePersonajes fabrica, HistorialJson historial, Combate combate, string archivoHistorial, List<Personaje> pjFabricados, List<Personaje> listGanadores)
+        public static async Task ControlarMenu(FabricaDePersonajes fabrica, HistorialJson historial, Combate combate, string archivoHistorial, List<Personaje> pjFabricados, List<Personaje> listGanadores)
         {
             Console.Clear();
             string[] options = {
@@ -47,7 +47,7 @@ namespace MenuInteractivo
                             await combate.RealizarCombate1v1(pjFabricados,combate,listGanadores,historial,archivoHistorial);
                             break;
                         case 2:
-                            await combate.combateTorre(pjFabricados, pjFabricados, combate,listGanadores,historial,archivoHistorial);
+                            await combate.Torre(pjFabricados, pjFabricados, combate,listGanadores,historial,archivoHistorial);
                             break;
                         case 3:
                             var leerPJ = historial.LeerGanador(archivoHistorial);

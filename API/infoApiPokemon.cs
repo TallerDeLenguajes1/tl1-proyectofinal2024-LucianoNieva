@@ -1,7 +1,7 @@
 // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
 using System.Text.Json.Serialization;
 // POKEMON
-namespace InfoPokeAPI
+namespace InfoPokemonAPI
 {
     public class Move
     {

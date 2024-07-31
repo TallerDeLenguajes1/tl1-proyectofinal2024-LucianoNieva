@@ -2,7 +2,7 @@ using System.Text.Json;
 
 public class ServicioWeb
 {
-    public async Task<T> GetData<T>(string url)
+    public async Task<T> TraerInformacionPokemon<T>(string url)
     {
         try
         {
