@@ -220,6 +220,8 @@ namespace combates
 
         private async Task<Personaje> realizarCombateTorre(List<Personaje> listGanadores, HistorialJson historial, string archivoHistorial, Personaje pjSeleccionado, int contador, List<Personaje> pjOponentes)
         {
+            var restaura = pjSeleccionado.Caracteristicas.Fuerza;
+            var restaura2 = pjSeleccionado.Caracteristicas.Armadura;
             foreach (var oponente in pjOponentes)
             {
                 Console.WriteLine($"\nNivel {contador + 1}: {pjSeleccionado.Datos.Name} vs {oponente.Datos.Name}");
@@ -241,9 +243,19 @@ namespace combates
             }
             Console.WriteLine("\n¡Felicidades, ganaste el torneo!");
             Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} ganó todos los niveles");
+            pjSeleccionado.Caracteristicas.Fuerza = restaura;
+            pjSeleccionado.Caracteristicas.Armadura = restaura2;
+            Console.WriteLine("\nPor ganar el torneo ganaste +3 Fuerza y +3 Armadura");
+            bonificacionTorneo(pjSeleccionado);
             guardarGanador(listGanadores, historial, archivoHistorial, pjSeleccionado);
             Console.WriteLine("-------------------------------------------------------------");
             return pjSeleccionado;
+        }
+
+        private static void bonificacionTorneo(Personaje pjSeleccionado)
+        {
+            pjSeleccionado.Caracteristicas.Fuerza += 3;
+            pjSeleccionado.Caracteristicas.Armadura += 3;
         }
 
         private async Task MostrarTransicionDeNivel(Personaje pj, int nivelActual)

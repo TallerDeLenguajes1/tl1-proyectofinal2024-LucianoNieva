@@ -26,7 +26,7 @@ public class Program
         Console.WriteLine("\nCargando el juego...\n");
         LoadingBar.Show();
         Musica musica = new Musica(direccionMusica);
-        musica.Play();
+        
         
         mostrarAscii.MostrarLogo();
         Console.WriteLine("\nPresione una tecla para empezar..");
