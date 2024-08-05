@@ -1,5 +1,6 @@
 
 using personaje;
+using fabrica;
 using seleccionPersonaje;
 using CrearApi;
 using ascii;
@@ -189,7 +190,7 @@ namespace combates
 
                 if (p1.Caracteristicas.Salud <= 0)
                 {
-                    return await ControlarSaludPJ(p1, p2, asci);
+                    return await ControlarSaludPJ(p2, p1, asci);
                 }
             }
             return null;
@@ -203,6 +204,7 @@ namespace combates
             p2.Caracteristicas.Salud = 100;
             asci.Finish();
             await ManejarFatality(p1);
+            Thread.Sleep(2000);
             return p1;
         }
 
@@ -214,7 +216,7 @@ namespace combates
             int nivel = seleccionarNivelTorre();
             int contador = 0;
             var pjOponentes = new List<Personaje>();
-            CargarOponentes(PjSecundario, random, pjSeleccionado, nivel, pjOponentes);
+            CargarYMostrarOponentes(PjSecundario, random, pjSeleccionado, nivel, pjOponentes);
             return await realizarCombateTorre(listGanadores, historial, archivoHistorial, pjSeleccionado, contador, pjOponentes);
         }
 
@@ -222,6 +224,7 @@ namespace combates
         {
             var restaura = pjSeleccionado.Caracteristicas.Fuerza;
             var restaura2 = pjSeleccionado.Caracteristicas.Armadura;
+            
             foreach (var oponente in pjOponentes)
             {
                 Console.WriteLine($"\nNivel {contador + 1}: {pjSeleccionado.Datos.Name} vs {oponente.Datos.Name}");
@@ -269,9 +272,10 @@ namespace combates
             await Task.Delay(2000);
         }
 
-        private static void CargarOponentes(List<Personaje> PjSecundario, Random random, Personaje pjSeleccionado, int nivel, List<Personaje> pjOponentes)
+        private static void CargarYMostrarOponentes(List<Personaje> PjSecundario, Random random, Personaje pjSeleccionado, int nivel, List<Personaje> pjOponentes)
         {
-            for (int i = 0; i < nivel; i++)
+            var fabrica = new FabricaDePersonajes();
+            for (int i = 0; i < nivel-1; i++)
             {
                 Personaje pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
 
@@ -282,6 +286,8 @@ namespace combates
 
                 pjOponentes.Add(pjSeleccionado2);
             }
+
+            pjOponentes.Add(fabrica.CrearGoro());
 
 
             Console.Clear();

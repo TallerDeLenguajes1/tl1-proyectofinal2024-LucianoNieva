@@ -30,8 +30,8 @@ namespace fabrica
             int nivel;
             int armadura;;
 
-            // Obtener datos de Pokémon
-            int id_poke = random.Next(1, 151); // Asumiendo los primeros 150 Pokémon
+            
+            int id_poke = random.Next(1, 151);
             Poke poke = await servicioWeb.TraerInformacionPokemon<Poke>($"https://pokeapi.co/api/v2/pokemon/{id_poke}");
 
             velocidad = poke.stats[5].base_stat/10;
@@ -44,6 +44,24 @@ namespace fabrica
             Personaje personaje = new Personaje(nombre, tipo, fechaNac, edad, id, velocidad, destreza, armadura, fuerza, nivel, Salud);
             return personaje;
         }
+
+        public Personaje CrearGoro()
+    {
+        string nombre = "GORO";
+        string tipo = "Jefe";
+        var fechaNac = DateTime.Now.AddYears(-300); 
+        int Salud = 100;
+        int velocidad = 10;
+        int destreza = 10;
+        int fuerza = 10;
+        int nivel = 10;
+        int armadura = 10;
+        int edad = 300;
+        int id = 999;  
+
+        return new Personaje(nombre, tipo, fechaNac, edad, id, velocidad, destreza, armadura, fuerza, nivel, Salud);
+        
+    }
 
         public async Task<List<Personaje>> CrearPersonajes(int cantidad)
         {

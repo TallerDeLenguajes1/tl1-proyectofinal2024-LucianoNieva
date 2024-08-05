@@ -118,6 +118,9 @@ namespace JSON
             }
             else if (opcion == 2)
             {
+                Console.Clear();
+                Console.WriteLine("Trayendo informacion de api..");
+                Thread.Sleep(2000);
                 var listaPjs = await fabrica.CrearPersonajes(10);
                 personajesJSON.GuardarPersonajes(listaPjs, archivo);
                 return listaPjs;
