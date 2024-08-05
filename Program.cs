@@ -21,17 +21,16 @@ public class Program
         var mostrarAscii = new Ascii();
         string direccionMusica = @"D:\Facultad\Taller\TrabajosPracticos\tl1-proyectofinal2024-LucianoNieva\audio\videoplayback.wav";
 
-
-
         Console.WriteLine("\nCargando el juego...\n");
         LoadingBar.Show();
         Musica musica = new Musica(direccionMusica);
-        
-        
+        musica.Play();
         mostrarAscii.MostrarLogo();
+        
         Console.WriteLine("\nPresione una tecla para empezar..");
         Console.ReadKey();
         Console.Clear();
+        musica.controlarMusica();
         var pjFabricados = await gestionPersonajes.CargarOcrearPersonajes(archivoPersonajes);
         await MenuInteractivo.Menu.ControlarMenu(fabrica, historial, combate, archivoHistorial, pjFabricados, listGanadores);
     }

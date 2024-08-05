@@ -34,5 +34,20 @@ namespace Soundtrack
             uint newVolume = ((uint)volume & 0x0000ffff) | ((uint)volume << 16);
             waveOutSetVolume(IntPtr.Zero, newVolume);
         }
+
+        public void controlarMusica()
+        {
+
+            Console.WriteLine("Desea quitar musica? 1 si 0 no");
+            int.TryParse(Console.ReadLine(), out int music);
+            if (music == 1)
+            {
+                Stop();
+            }
+            else
+            {
+                Play();
+            }
+        }
     }
 }

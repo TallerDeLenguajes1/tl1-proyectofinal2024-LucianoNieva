@@ -203,8 +203,8 @@ namespace combates
             p1.Caracteristicas.Salud = 100;
             p2.Caracteristicas.Salud = 100;
             asci.Finish();
+            Thread.Sleep(1000);
             await ManejarFatality(p1);
-            Thread.Sleep(2000);
             return p1;
         }
 
@@ -213,7 +213,7 @@ namespace combates
             var random = new Random();
             var seleccion = new Seleccion();
             Personaje pjSeleccionado = SeleccionarPJ(pjPrincipal, seleccion);
-            int nivel = seleccionarNivelTorre();
+            int nivel = SeleccionarNivelTorre();
             int contador = 0;
             var pjOponentes = new List<Personaje>();
             CargarYMostrarOponentes(PjSecundario, random, pjSeleccionado, nivel, pjOponentes);
@@ -224,7 +224,7 @@ namespace combates
         {
             var restaura = pjSeleccionado.Caracteristicas.Fuerza;
             var restaura2 = pjSeleccionado.Caracteristicas.Armadura;
-            
+
             foreach (var oponente in pjOponentes)
             {
                 Console.WriteLine($"\nNivel {contador + 1}: {pjSeleccionado.Datos.Name} vs {oponente.Datos.Name}");
@@ -275,7 +275,7 @@ namespace combates
         private static void CargarYMostrarOponentes(List<Personaje> PjSecundario, Random random, Personaje pjSeleccionado, int nivel, List<Personaje> pjOponentes)
         {
             var fabrica = new FabricaDePersonajes();
-            for (int i = 0; i < nivel-1; i++)
+            for (int i = 0; i < nivel - 1; i++)
             {
                 Personaje pjSeleccionado2 = PjSecundario[random.Next(PjSecundario.Count)];
 
@@ -308,32 +308,45 @@ namespace combates
 
         private async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)
         {
-            string weather = await ApiClima.TraerInfoClima();
-            Console.WriteLine($"El clima en esta batalla es: {weather}");
-            ApiClima.controlarClimaConPersonaje(pjSeleccionado, weather);
-            ApiClima.controlarClimaConPersonaje(pjSeleccionado2, weather);
+            string clima = await ApiClima.TraerInfoClima();
+            Console.WriteLine($"El clima en esta batalla es: {clima}");
+            ApiClima.controlarClimaConPersonaje(pjSeleccionado, clima);
+            ApiClima.controlarClimaConPersonaje(pjSeleccionado2, clima);
         }
 
-        private static int seleccionarNivelTorre()
+        private static int SeleccionarNivelTorre()
         {
-
             Console.WriteLine("\nSeleccione la longitud de la torre:");
             Console.WriteLine("1. Torre corta (3 niveles)");
             Console.WriteLine("2. Torre común (5 niveles)");
             Console.WriteLine("3. Torre larga (7 niveles)");
             Console.Write("Seleccione una opción: ");
 
-
-            int.TryParse(Console.ReadLine(), out int nivel);
-
-            return nivel switch
+            if (int.TryParse(Console.ReadLine(), out int nivel))
             {
-                1 => 3,
-                2 => 5,
-                3 => 7,
-                _ => 3,
-            };
+                switch (nivel)
+                {
+                    case 1:
+                        return 3;
+                    case 2:
+                        return 5;
+                    case 3:
+                        return 7;
+                    default:
+                        Console.WriteLine("Opción no válida. Se seleccionará la Torre corta (3 niveles) por defecto.");
+                        Thread.Sleep(2000);
+                        return 3;
+                }
+            }
+            else
+            {
+                
+                Console.WriteLine("Entrada no válida. Se seleccionará la Torre corta (3 niveles) por defecto.");
+                Thread.Sleep(2000);
+                return 3;
+            }
         }
+
 
         private static async Task ManejarFatality(Personaje pjSeleccionado)
         {
@@ -347,17 +360,22 @@ namespace combates
             if (i == 0)
             {
                 Console.WriteLine("Falló la combinación. No se realizó la fatality.");
+                Thread.Sleep(500);
                 Console.WriteLine("No recibiste una bonificación.");
+                Thread.Sleep(500);
                 asci.mostrarPJ(pjSeleccionado);
                 Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
             else
             {
                 asci.Fatality();
+                Thread.Sleep(1000);
                 Console.WriteLine($"Recibiste una bonificación +2 de fuerza y +2 de armadura.");
+                Thread.Sleep(1000);
                 pjSeleccionado.Caracteristicas.Fuerza += 2;
                 pjSeleccionado.Caracteristicas.Armadura += 2;
                 asci.mostrarPJ(pjSeleccionado);
+                Thread.Sleep(1000);
                 Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
         }
