@@ -38,7 +38,9 @@ namespace Soundtrack
         public void controlarMusica()
         {
 
-            Console.WriteLine("Desea quitar musica? 1 si 0 no");
+            Console.WriteLine("Desea quitar musica?");
+            Console.WriteLine("1) Si");
+            Console.WriteLine("2) No");
             int.TryParse(Console.ReadLine(), out int music);
             if (music == 1)
             {

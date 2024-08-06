@@ -32,7 +32,7 @@ public class Program
         Console.Clear();
         musica.controlarMusica();
         var pjFabricados = await gestionPersonajes.CargarOcrearPersonajes(archivoPersonajes);
-        await MenuInteractivo.Menu.ControlarMenu(fabrica, historial, combate, archivoHistorial, pjFabricados, listGanadores);
+        await MenuInteractivo.Menu.OpcionesMenu(fabrica, historial, combate, archivoHistorial, pjFabricados, listGanadores);
     }
 }
 

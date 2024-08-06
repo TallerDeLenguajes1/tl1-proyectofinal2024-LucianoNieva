@@ -99,6 +99,7 @@ namespace JSON
 
         public async Task<List<Personaje>> CargarOcrearPersonajes(string archivo)
         {
+            Console.Clear();
             Console.WriteLine("¿Desea usar los personajes ya cargados o crear nuevos?");
             Console.WriteLine("1) Usar personajes cargados");
             Console.WriteLine("2) Crear nuevos personajes");
@@ -113,6 +114,7 @@ namespace JSON
                 else
                 {
                     Console.WriteLine("No hay personajes cargados. Seleccione la opción de cargar personajes nuevos.");
+                    Thread.Sleep(500);
                     return await CargarOcrearPersonajes(archivo);
                 }
             }

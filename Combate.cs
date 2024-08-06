@@ -5,6 +5,7 @@ using seleccionPersonaje;
 using CrearApi;
 using ascii;
 using JSON;
+using System.Diagnostics.Contracts;
 
 namespace combates
 {
@@ -43,8 +44,9 @@ namespace combates
         {
             if (danioProvocado > 15)
             {
-
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("REALIZO UN GOLPE CRITICO!");
+                Console.ResetColor();
             }
         }
 
@@ -58,24 +60,41 @@ namespace combates
 
         public async Task RealizarCombate1v1(List<Personaje> personajes, Combate combate, List<Personaje> listGanadores, HistorialJson historial, string archivoHistorial)
         {
-            Console.WriteLine("¿Quieres jugar contra un bot o un amigo?");
-            Console.WriteLine("1) Contra un bot");
-            Console.WriteLine("2) Contra un amigo");
-            int.TryParse(Console.ReadLine(), out int opcion);
+            bool salir = false;
+            while (!salir)
+            {
+                Console.Clear();
+                Console.WriteLine("¿Quieres jugar contra un bot, un amigo, o volver al menú principal?");
+                Console.WriteLine("1) Contra un bot");
+                Console.WriteLine("2) Contra un amigo");
+                Console.WriteLine("3) Volver al menú principal");
 
-            if (opcion == 1)
-            {
-                var pjGanador = await combate.pelea1v1Bot(personajes);
-                guardarGanador(listGanadores, historial, archivoHistorial, pjGanador);
-            }
-            else if (opcion == 2)
-            {
-                var pjGanador = await combate.pelea1v1Amigo(personajes);
-                guardarGanador(listGanadores, historial, archivoHistorial, pjGanador);
-            }
-            else
-            {
-                Console.WriteLine("Opción no válida.");
+                if (int.TryParse(Console.ReadLine(), out int opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            var pjGanadorBot = await combate.pelea1v1Bot(personajes);
+                            guardarGanador(listGanadores, historial, archivoHistorial, pjGanadorBot);
+                            break;
+                        case 2:
+                            var pjGanadorAmigo = await combate.pelea1v1Amigo(personajes);
+                            guardarGanador(listGanadores, historial, archivoHistorial, pjGanadorAmigo);
+                            break;
+                        case 3:
+                            salir = true;
+                            break;
+                        default:
+                            Console.WriteLine("Opción no válida. Presiona cualquier tecla para intentarlo de nuevo...");
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Presiona cualquier tecla para intentarlo de nuevo...");
+                    Console.ReadKey();
+                }
             }
         }
 
@@ -227,23 +246,30 @@ namespace combates
 
             foreach (var oponente in pjOponentes)
             {
-                Console.WriteLine($"\nNivel {contador + 1}: {pjSeleccionado.Datos.Name} vs {oponente.Datos.Name}");
+
+                await MostrarTransicionDeNivel(pjSeleccionado,oponente, contador + 1);
                 await verificarBonificacionClima(pjSeleccionado, oponente);
 
                 var pjGanador = await realizarCombate(pjSeleccionado, oponente);
 
                 if (pjGanador == pjSeleccionado)
                 {
-                    await MostrarTransicionDeNivel(pjGanador, contador + 1);
-                }
-                else
+                    Console.Clear();
+                    Console.WriteLine("\nSubiendo al siguiente nivel...");
+                    Thread.Sleep(2000);
+                    
+                }else
                 {
                     Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} perdió en el nivel {contador + 1}");
                     return pjGanador;
                 }
 
+
                 contador++;
+
+                jefeFinal(contador);
             }
+            Console.Clear();
             Console.WriteLine("\n¡Felicidades, ganaste el torneo!");
             Console.WriteLine($"\nEl personaje {pjSeleccionado.Datos.Name} ganó todos los niveles");
             pjSeleccionado.Caracteristicas.Fuerza = restaura;
@@ -255,20 +281,32 @@ namespace combates
             return pjSeleccionado;
         }
 
+        private static void jefeFinal(int contador)
+        {
+            if (contador == 2 || contador == 4 || contador == 6)
+            {
+                Console.WriteLine("Felicitaciones estas en la final, ahora toca enfrentarte con el jefe FINAL");
+                Thread.Sleep(4000);
+                Console.Clear();
+                Console.WriteLine("SUERTE!");
+                Thread.Sleep(2000);
+
+            }
+        }
+
         private static void bonificacionTorneo(Personaje pjSeleccionado)
         {
             pjSeleccionado.Caracteristicas.Fuerza += 3;
             pjSeleccionado.Caracteristicas.Armadura += 3;
         }
 
-        private async Task MostrarTransicionDeNivel(Personaje pj, int nivelActual)
+        private async Task MostrarTransicionDeNivel(Personaje pj,Personaje pj2, int nivelActual)
         {
             Console.Clear();
             Console.WriteLine("==================================");
-            Console.WriteLine($"        {pj.Datos.Name} ");
-            Console.WriteLine($"        Nivel {nivelActual}");
+            Console.WriteLine($"        {pj.Datos.Name} vs {pj2.Datos.Name}");
+            Console.WriteLine($"               Nivel {nivelActual}");
             Console.WriteLine("==================================");
-            Console.WriteLine("\nSubiendo al siguiente nivel...");
             await Task.Delay(2000);
         }
 
@@ -304,6 +342,7 @@ namespace combates
                 Console.WriteLine($"Nivel {1 + cont} {item.Datos.Name} ");
                 cont++;
             }
+            Thread.Sleep(2000);
         }
 
         private async Task verificarBonificacionClima(Personaje pjSeleccionado, Personaje pjSeleccionado2)
@@ -340,7 +379,7 @@ namespace combates
             }
             else
             {
-                
+
                 Console.WriteLine("Entrada no válida. Se seleccionará la Torre corta (3 niveles) por defecto.");
                 Thread.Sleep(2000);
                 return 3;
@@ -361,16 +400,17 @@ namespace combates
             {
                 Console.WriteLine("Falló la combinación. No se realizó la fatality.");
                 Thread.Sleep(500);
-                Console.WriteLine("No recibiste una bonificación.");
+                Console.WriteLine("No recibio una bonificación.");
                 Thread.Sleep(500);
                 asci.mostrarPJ(pjSeleccionado);
+                Thread.Sleep(1000);
                 Console.WriteLine("---------COMBATE FINALIZADO--------");
             }
             else
             {
                 asci.Fatality();
                 Thread.Sleep(1000);
-                Console.WriteLine($"Recibiste una bonificación +2 de fuerza y +2 de armadura.");
+                Console.WriteLine($"{pjSeleccionado.Datos.Name} recibio una bonificación +2 de fuerza y +2 de armadura.");
                 Thread.Sleep(1000);
                 pjSeleccionado.Caracteristicas.Fuerza += 2;
                 pjSeleccionado.Caracteristicas.Armadura += 2;

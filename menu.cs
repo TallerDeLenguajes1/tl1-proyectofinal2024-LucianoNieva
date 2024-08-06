@@ -8,12 +8,12 @@ namespace MenuInteractivo
 {
     public static class Menu
     {
-        private static int selectedIndex = 0;
+        private static int seleccionar = 0;
 
-        public static async Task ControlarMenu(FabricaDePersonajes fabrica, HistorialJson historial, Combate combate, string archivoHistorial, List<Personaje> pjFabricados, List<Personaje> listGanadores)
+        public static async Task OpcionesMenu(FabricaDePersonajes fabrica, HistorialJson historial, Combate combate, string archivoHistorial, List<Personaje> pjFabricados, List<Personaje> listGanadores)
         {
             Console.Clear();
-            string[] options = {
+            string[] opciones = {
                 "Mostrar personajes",
                 "Realizar combate 1v1",
                 "Realizar torneo",
@@ -24,21 +24,21 @@ namespace MenuInteractivo
             while (true)
             {
                 Console.Clear();
-                DisplayMenu(options);
+                MostrarMenu(opciones);
                 var key = Console.ReadKey(true).Key;
 
                 if (key == ConsoleKey.UpArrow)
                 {
-                    selectedIndex = (selectedIndex - 1 + options.Length) % options.Length;
+                    seleccionar = (seleccionar - 1 + opciones.Length) % opciones.Length;
                 }
                 else if (key == ConsoleKey.DownArrow)
                 {
-                    selectedIndex = (selectedIndex + 1) % options.Length;
+                    seleccionar = (seleccionar + 1) % opciones.Length;
                 }
                 else if (key == ConsoleKey.Enter)
                 {
                     Console.Clear();
-                    switch (selectedIndex)
+                    switch (seleccionar)
                     {
                         case 0:
                             fabrica.MostrarPersonaje(pjFabricados);
@@ -65,20 +65,20 @@ namespace MenuInteractivo
             }
         }
 
-        private static void DisplayMenu(string[] options)
+        private static void MostrarMenu(string[] opciones)
         {
             Console.WriteLine("\nSeleccione una opcion:");
-            for (int i = 0; i < options.Length; i++)
+            for (int i = 0; i < opciones.Length; i++)
             {
-                if (i == selectedIndex)
+                if (i == seleccionar)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"> {options[i]}");
+                    Console.WriteLine($"> {opciones[i]}");
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine($"  {options[i]}");
+                    Console.WriteLine($"  {opciones[i]}");
                 }
             }
         }
